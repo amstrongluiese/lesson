@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Production build
+dist/
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# Generated config output
+vite.config.js
+vite.config.d.ts
+
+# Local logs
+*.log
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+.vscode/
