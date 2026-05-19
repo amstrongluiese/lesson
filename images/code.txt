@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Art of HTML | A Folklore Study</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        fog: '#E6E4DC',
+                        ash: '#B4B5B1',
+                        charcoal: '#2C2E2C',
+                        moss: '#545C52',
+                        dust: '#D1C9B8',
+                        bark: '#8C7E6C',
+                        silver: '#A3A6A3',
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        mono: ['"Courier Prime"', 'monospace'],
+                        handwriting: ['"Nanum Pen Script"', 'cursive'],
+                    },
+                    animation: {
+                        'slow-pan': 'pan 40s linear infinite',
+                        'slow-pan-reverse': 'pan-reverse 50s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'flicker': 'flicker 3s infinite alternate',
+                    },
+                    keyframes: {
+                        pan: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        'pan-reverse': {
+                            '0%': { transform: 'translateX(-50%)' },
+                            '100%': { transform: 'translateX(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0) rotate(-1deg)' },
+                            '50%': { transform: 'translateY(-10px) rotate(1deg)' },
+                        },
+                        flicker: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.8' },
+                            '25%, 75%': { opacity: '0.9' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base & Hide Scrollbar */
+        body {
+            background-color: #E6E4DC;
+            color: #2C2E2C;
+            overflow-x: hidden;
+            cursor: none; /* Custom cursor */
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #E6E4DC; }
+        ::-webkit-scrollbar-thumb { background: #B4B5B1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8C7E6C; }
+
+        /* Film Grain Overlay */
+        .film-grain {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.06;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Cinematic Fog */
+        .fog-container {
+            position: fixed;
+            top: 0; left: 0; width: 200vw; height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.4;
+            display: flex;
+        }
+        .fog-layer {
+            width: 50%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/dust.png') repeat;
+            filter: blur(8px);
+        }
+        .fog-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(to bottom, rgba(230,228,220,0.8) 0%, rgba(209,201,184,0.3) 100%), 
+                        url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            z-index: -2;
+            opacity: 0.5;
+            filter: grayscale(40%) sepia(20%);
+        }
+
+        /* Custom Cursor */
+        .cursor-dot {
+            width: 6px; height: 6px;
+            background-color: #2C2E2C;
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 100;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s;
+        }
+        .cursor-outline {
+            width: 30px; height: 30px;
+            border: 1px solid rgba(44, 46, 44, 0.4);
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out, width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(209, 201, 184, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(140, 126, 108, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+            border-color: rgba(140, 126, 108, 0.4);
+        }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: rgba(44, 46, 44, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(209, 201, 184, 0.2);
+            color: #D1C9B8;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .code-block::before {
+            content: '';
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.03) 50%, transparent 60%);
+            background-size: 200% 200%;
+            animation: shimmer 4s infinite linear;
+            pointer-events: none;
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        /* Highlight Colors for Code */
+        .t-tag { color: #A3A6A3; } /* silver */
+        .t-attr { color: #8C7E6C; } /* bark */
+        .t-val { color: #B4B5B1; font-style: italic; } /* ash */
+        .t-comment { color: #545C52; font-style: italic; } /* moss */
+
+        /* Collage Polaroids */
+        .polaroid {
+            background: #F9F8F6;
+            padding: 10px 10px 40px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: absolute;
+            cursor: pointer;
+            filter: grayscale(60%) sepia(30%) contrast(0.9);
+        }
+        .polaroid:hover {
+            transform: scale(1.1) rotate(0deg) !important;
+            z-index: 40 !important;
+            filter: grayscale(0%) sepia(10%) contrast(1.0);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        .polaroid img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+        .collage-container {
+            position: relative;
+            height: 700px;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Progress Bar */
+        #scroll-progress {
+            position: fixed; top: 0; left: 0; height: 3px;
+            background: rgba(140, 126, 108, 0.6);
+            width: 0%; z-index: 100;
+            transition: width 0.1s ease;
+        }
+
+        /* Loader */
+        #cinematic-loader {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #E6E4DC;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 1000;
+            transition: opacity 1.5s ease, visibility 1.5s ease;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-moss selection:text-fog">
+
+    <div id="scroll-progress"></div>
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+    
+    <div class="film-grain"></div>
+    <div class="fog-bg"></div>
+    <canvas id="particle-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 opacity-60"></canvas>
+    
+    <div class="fog-container animate-slow-pan">
+        <div class="fog-layer"></div>
+        <div class="fog-layer"></div>
+    </div>
+    <div class="fog-container animate-slow-pan-reverse" style="opacity: 0.2; transform: scale(1.5);">
+        <div class="fog-layer"></div>
+        <div class="fog-layer"></div>
+    </div>
+
+    <div id="cinematic-loader">
+        <div class="text-center px-4">
+            <h1 class="text-3xl md:text-5xl font-serif text-charcoal mb-4 opacity-0 transition-opacity duration-1000" id="loader-text-1">Take a deep breath...</h1>
+            <p class="text-xl font-serif text-moss italic opacity-0 transition-opacity duration-1000 delay-1000" id="loader-text-2">let the story of the web unfold.</p>
+        </div>
+    </div>
+
+    <div class="fixed bottom-6 right-6 z-40">
+        <button id="music-toggle" class="glass-card p-4 rounded-full flex items-center justify-center group hover:bg-white/30 transition-all duration-300">
+            <svg class="w-6 h-6 text-charcoal opacity-70 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+            </svg>
+        </button>
+    </div>
+    
+    <!-- Audio Elements (User will provide src) -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="your-song.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="ambient-music" loop preload="auto">
+        <source src="forest-ambient.mp3" type="audio/mpeg">
+    </audio>
+
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-40 hidden md:block">
+        <ul class="flex space-x-8 glass-card px-8 py-3 rounded-full font-serif text-sm tracking-widest uppercase text-charcoal/80">
+            <li><a href="#intro" class="hover:text-moss transition-colors">Intro</a></li>
+            <li><a href="#structure" class="hover:text-moss transition-colors">Structure</a></li>
+            <li><a href="#content" class="hover:text-moss transition-colors">Content</a></li>
+            <li><a href="#media" class="hover:text-moss transition-colors">Media</a></li>
+            <li><a href="#memories" class="hover:text-moss transition-colors">Memories</a></li>
+        </ul>
+    </nav>
+
+    <main class="relative z-10 w-full max-w-4xl mx-auto px-6 py-24 md:py-40 flex flex-col gap-32">
+        
+        <!-- Hero Section -->
+        <header id="intro" class="text-center min-h-[70vh] flex flex-col justify-center items-center reveal relative">
+            <span class="font-handwriting text-3xl text-bark mb-4 -rotate-2 inline-block">chapter one</span>
+            <h1 class="text-6xl md:text-8xl font-serif text-charcoal tracking-tight leading-none mb-6">
+                The Art <span class="italic font-light text-moss">of the</span> Web
+            </h1>
+            <p class="text-xl md:text-2xl font-serif text-charcoal/70 max-w-2xl mx-auto leading-relaxed">
+                Passed down like folk songs. A beginner's diary to writing HTML, the foundation of every story told online.
+            </p>
+            
+            <div class="mt-24 animate-float opacity-50 flex flex-col items-center">
+                <span class="font-serif text-sm uppercase tracking-widest mb-2">Scroll Gently</span>
+                <div class="w-[1px] h-16 bg-charcoal"></div>
+            </div>
+        </header>
+
+        <section class="reveal relative">
+            <div class="absolute -left-12 -top-12 text-6xl opacity-10 font-serif">I</div>
+            <div class="glass-card p-8 md:p-12 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-moss/5 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700"></div>
+                
+                <h2 class="text-3xl md:text-4xl font-serif text-charcoal mb-4">What is HTML?</h2>
+                <p class="text-lg font-serif text-charcoal/80 leading-relaxed mb-6">
+                    HTML stands for <span class="italic">HyperText Markup Language</span>. If a website were a cabin in the woods, HTML would be the wooden beams and the floorboards. It doesn't paint the walls or build the furniture (that's CSS), but it provides the essential structure.
+                </p>
+                <p class="text-lg font-serif text-charcoal/80 leading-relaxed">
+                    It uses a system of "tags" to wrap around text, whispering to the web browser: <br>
+                    <span class="font-handwriting text-2xl text-moss">"Make this a title. Make this a paragraph. Put a picture here."</span>
+                </p>
+            </div>
+        </section>
+
+        <section id="structure" class="reveal relative">
+            <div class="absolute -right-12 -top-12 text-6xl opacity-10 font-serif">II</div>
+            <div class="glass-card p-8 md:p-12">
+                <h2 class="text-3xl md:text-4xl font-serif text-charcoal mb-4">The Skeleton</h2>
+                <p class="text-lg font-serif text-charcoal/80 leading-relaxed mb-8">
+                    Every letter needs an envelope. Every web page needs a standard blueprint called the "boilerplate." This tells the browser exactly how to read your writing.
+                </p>
+                
+                <div class="code-block p-6 font-mono shadow-xl relative group">
+                    <button class="absolute top-4 right-4 text-xs tracking-widest text-dust/50 uppercase hover:text-dust transition-colors">Copy</button>
+                    <pre><code><span class="t-comment">&lt;!-- The Declaration --&gt;</span>
+<span class="t-tag">&lt;!DOCTYPE</span> <span class="t-attr">html</span><span class="t-tag">&gt;</span>
+
+<span class="t-comment">&lt;!-- The Root Envelope --&gt;</span>
+<span class="t-tag">&lt;html</span> <span class="t-attr">lang=</span><span class="t-val">"en"</span><span class="t-tag">&gt;</span>
+
+  <span class="t-comment">&lt;!-- The Mind (Invisible settings) --&gt;</span>
+  <span class="t-tag">&lt;head&gt;</span>
+    <span class="t-tag">&lt;title&gt;</span>My Folklore Diary<span class="t-tag">&lt;/title&gt;</span>
+  <span class="t-tag">&lt;/head&gt;</span>
+
+  <span class="t-comment">&lt;!-- The Heart (What the user sees) --&gt;</span>
+  <span class="t-tag">&lt;body&gt;</span>
+    Content goes here...
+  <span class="t-tag">&lt;/body&gt;</span>
+
+<span class="t-tag">&lt;/html&gt;</span></code></pre>
+                </div>
+            </div>
+        </section>
+
+        <div class="w-full flex justify-center reveal opacity-40">
+            <svg width="200" height="20" viewBox="0 0 200 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 10C50 10 50 0 100 0C150 0 150 10 200 10" stroke="#8C7E6C" stroke-width="0.5"/>
+                <circle cx="100" cy="5" r="2" fill="#8C7E6C"/>
+            </svg>
+        </div>
+
+        <section id="content" class="reveal relative">
+            <div class="absolute -left-12 -top-12 text-6xl opacity-10 font-serif">III</div>
+            <div class="glass-card p-8 md:p-12">
+                <h2 class="text-3xl md:text-4xl font-serif text-charcoal mb-4">Whispers & Proclamations</h2>
+                <p class="text-lg font-serif text-charcoal/80 leading-relaxed mb-8">
+                    Tags usually come in pairs—an opening and a closing. We use headings for chapter titles, and paragraphs for the story itself.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div class="border-l-2 border-moss/30 pl-4 py-2 hover:border-moss transition-colors">
+                            <code class="font-mono text-charcoal bg-white/40 px-2 py-1 rounded text-sm">&lt;h1&gt; to &lt;h6&gt;</code>
+                            <p class="font-serif text-charcoal/70 mt-2">Headings. <code>&lt;h1&gt;</code> is the loudest voice, <code>&lt;h6&gt;</code> is the quietest whisper.</p>
+                        </div>
+                        <div class="border-l-2 border-bark/30 pl-4 py-2 hover:border-bark transition-colors">
+                            <code class="font-mono text-charcoal bg-white/40 px-2 py-1 rounded text-sm">&lt;p&gt;</code>
+                            <p class="font-serif text-charcoal/70 mt-2">The paragraph tag. Used for your everyday sentences.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-fog/50 p-6 rounded border border-charcoal/10 font-serif shadow-inner">
+                        <span class="text-xs uppercase tracking-widest text-charcoal/40 mb-4 block border-b border-charcoal/10 pb-2">Preview</span>
+                        <h1 class="text-3xl font-bold mb-2">August</h1>
+                        <h3 class="text-xl italic text-charcoal/60 mb-4">Salt air, and the rust on your door...</h3>
+                        <p class="text-charcoal/80 leading-relaxed">I never needed anything more. Whispers of "are you sure?" Never have I ever before.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="media" class="reveal relative">
+            <div class="glass-card p-8 md:p-12 bg-gradient-to-br from-transparent to-moss/5 border-moss/20">
+                <h2 class="text-3xl md:text-4xl font-serif text-charcoal mb-4">Pathways & Photographs</h2>
+                
+                <div class="mt-8 space-y-12">
+                    <!-- Links -->
+                    <div>
+                        <h3 class="text-2xl font-serif text-charcoal mb-2 flex items-center gap-3">
+                            <span class="font-handwriting text-3xl text-bark">01.</span> Anchors
+                        </h3>
+                        <p class="text-lg font-serif text-charcoal/80 mb-4">
+                            The <code>&lt;a&gt;</code> tag creates a hyperlink, anchoring one page to another. It requires an <code>href</code> attribute to know where to go.
+                        </p>
+                        <div class="code-block p-4 mb-3">
+                            <code><span class="t-tag">&lt;a</span> <span class="t-attr">href=</span><span class="t-val">"https://taylorswift.com"</span><span class="t-tag">&gt;</span>Take me home<span class="t-tag">&lt;/a&gt;</span></code>
+                        </div>
+                    </div>
+
+                    <!-- Images -->
+                    <div>
+                        <h3 class="text-2xl font-serif text-charcoal mb-2 flex items-center gap-3">
+                            <span class="font-handwriting text-3xl text-moss">02.</span> Images
+                        </h3>
+                        <p class="text-lg font-serif text-charcoal/80 mb-4">
+                            The <code>&lt;img&gt;</code> tag places a picture on the wall. It is a "void element"—it has no closing tag. It needs a <code>src</code> (source) and an <code>alt</code> (description for accessibility).
+                        </p>
+                        <div class="code-block p-4">
+                            <code><span class="t-tag">&lt;img</span> <span class="t-attr">src=</span><span class="t-val">"cabin.jpg"</span> <span class="t-attr">alt=</span><span class="t-val">"An old wooden cabin"</span><span class="t-tag">&gt;</span></code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal relative">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Lists -->
+                <div class="glass-card p-8">
+                    <h3 class="text-2xl font-serif text-charcoal mb-4 border-b border-charcoal/10 pb-2">Gathering Things</h3>
+                    <p class="font-serif text-charcoal/70 mb-4">Use <code>&lt;ul&gt;</code> for bulleted lists, and <code>&lt;ol&gt;</code> for numbered lists. Inside, each item is an <code>&lt;li&gt;</code>.</p>
+                    <ul class="list-none space-y-2 font-serif text-charcoal/90 mt-4 pl-4 border-l border-bark/30">
+                        <li class="relative before:content-[''] before:absolute before:-left-[21px] before:top-2 before:w-2 before:h-2 before:bg-bark before:rounded-full">Cardigan</li>
+                        <li class="relative before:content-[''] before:absolute before:-left-[21px] before:top-2 before:w-2 before:h-2 before:bg-bark before:rounded-full">Mirrorball</li>
+                        <li class="relative before:content-[''] before:absolute before:-left-[21px] before:top-2 before:w-2 before:h-2 before:bg-bark before:rounded-full">Seven</li>
+                    </ul>
+                </div>
+
+                <!-- Semantics -->
+                <div class="glass-card p-8">
+                    <h3 class="text-2xl font-serif text-charcoal mb-4 border-b border-charcoal/10 pb-2">Giving Meaning</h3>
+                    <p class="font-serif text-charcoal/70 mb-4">HTML5 introduced tags that describe their purpose, making the web beautifully organized.</p>
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <span class="px-3 py-1 bg-white/40 border border-charcoal/10 rounded-full font-mono text-sm text-charcoal hover:bg-moss/20 transition-colors">&lt;header&gt;</span>
+                        <span class="px-3 py-1 bg-white/40 border border-charcoal/10 rounded-full font-mono text-sm text-charcoal hover:bg-moss/20 transition-colors">&lt;nav&gt;</span>
+                        <span class="px-3 py-1 bg-white/40 border border-charcoal/10 rounded-full font-mono text-sm text-charcoal hover:bg-moss/20 transition-colors">&lt;main&gt;</span>
+                        <span class="px-3 py-1 bg-white/40 border border-charcoal/10 rounded-full font-mono text-sm text-charcoal hover:bg-moss/20 transition-colors">&lt;article&gt;</span>
+                        <span class="px-3 py-1 bg-white/40 border border-charcoal/10 rounded-full font-mono text-sm text-charcoal hover:bg-moss/20 transition-colors">&lt;footer&gt;</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="memories" class="mt-20 reveal">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-6xl font-serif text-charcoal mb-4">Long story short...</h2>
+                <p class="text-xl font-handwriting text-charcoal/60">you've built the foundation. The rest is just poetry.</p>
+            </div>
+
+            <div class="collage-container" id="collage">
+                <!-- Image 1 -->
+                <div class="polaroid" style="top: 10%; left: 5%; width: 250px; transform: rotate(-8deg);">
+                    <div class="h-[280px] w-full overflow-hidden mb-3">
+                        <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=600&q=80" alt="Foggy Forest">
+                    </div>
+                    <p class="font-handwriting text-center text-xl text-bark">the woods</p>
+                </div>
+                
+                <!-- Image 2 -->
+                <div class="polaroid" style="top: 30%; left: 60%; width: 280px; transform: rotate(12deg); z-index: 2;">
+                    <div class="h-[250px] w-full overflow-hidden mb-3">
+                        <img src="https://images.unsplash.com/photo-1455390582262-044cdead27d8?auto=format&fit=crop&w=600&q=80" alt="Vintage Typewriter">
+                    </div>
+                    <p class="font-handwriting text-center text-xl text-bark">&lt;code&gt;</p>
+                </div>
+
+                <!-- Image 3 (Center focus) -->
+                <div class="polaroid" style="top: 20%; left: 30%; width: 320px; transform: rotate(2deg); z-index: 10;">
+                    <div class="h-[360px] w-full overflow-hidden mb-3">
+                        <img src="https://images.unsplash.com/photo-1542385151-efd9000785a0?auto=format&fit=crop&w=600&q=80" alt="Cabin in woods">
+                    </div>
+                    <p class="font-handwriting text-center text-2xl text-charcoal font-bold">html skeleton</p>
+                </div>
+
+                <!-- Image 4 -->
+                <div class="polaroid" style="top: 55%; left: 10%; width: 240px; transform: rotate(-15deg); z-index: 3;">
+                    <div class="h-[240px] w-full overflow-hidden mb-3">
+                        <img src="https://images.unsplash.com/photo-1498674202614-ac01ee2fbb31?auto=format&fit=crop&w=600&q=80" alt="Autumn Leaves">
+                    </div>
+                    <p class="font-handwriting text-center text-xl text-bark">autumn styles</p>
+                </div>
+
+                <!-- Image 5 -->
+                <div class="polaroid" style="top: 65%; left: 50%; width: 260px; transform: rotate(6deg); z-index: 4;">
+                    <div class="h-[220px] w-full overflow-hidden mb-3">
+                        <img src="https://images.unsplash.com/photo-1510127034890-ba27508e9f1c?auto=format&fit=crop&w=600&q=80" alt="Vintage Book">
+                    </div>
+                    <p class="font-handwriting text-center text-xl text-bark">passed down</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center border-t border-charcoal/10 pt-12 pb-24 mt-12 reveal">
+            <p class="font-serif text-charcoal/60 text-sm tracking-widest uppercase mb-4">A Cinematic Study Experience</p>
+            <p class="font-handwriting text-2xl text-charcoal/40">happy coding 🤍</p>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 1. Cinematic Loader ---
+            const loader = document.getElementById('cinematic-loader');
+            const text1 = document.getElementById('loader-text-1');
+            const text2 = document.getElementById('loader-text-2');
+            
+            setTimeout(() => { text1.style.opacity = '1'; }, 500);
+            setTimeout(() => { text2.style.opacity = '1'; }, 2000);
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 1500);
+            }, 4500);
+
+            // --- 2. Custom Cursor ---
+            const cursorDot = document.getElementById('cursor-dot');
+            const cursorOutline = document.getElementById('cursor-outline');
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+            let outlineX = mouseX;
+            let outlineY = mouseY;
+
+            // Hide standard cursor on non-touch devices
+            if (window.matchMedia("(pointer: fine)").matches) {
+                window.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                    cursorDot.style.left = `${mouseX}px`;
+                    cursorDot.style.top = `${mouseY}px`;
+                });
+
+                // Smooth following outline
+                const animateCursor = () => {
+                    let dx = mouseX - outlineX;
+                    let dy = mouseY - outlineY;
+                    outlineX += dx * 0.15;
+                    outlineY += dy * 0.15;
+                    cursorOutline.style.left = `${outlineX}px`;
+                    cursorOutline.style.top = `${outlineY}px`;
+                    requestAnimationFrame(animateCursor);
+                };
+                animateCursor();
+
+                // Hover effects for cursor
+                const interactables = document.querySelectorAll('a, button, .polaroid, .glass-card');
+                interactables.forEach(el => {
+                    el.addEventListener('mouseenter', () => {
+                        cursorOutline.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                        cursorOutline.style.backgroundColor = 'rgba(84, 92, 82, 0.1)'; // moss tint
+                        cursorOutline.style.borderColor = 'rgba(84, 92, 82, 0.5)';
+                    });
+                    el.addEventListener('mouseleave', () => {
+                        cursorOutline.style.transform = 'translate(-50%, -50%) scale(1)';
+                        cursorOutline.style.backgroundColor = 'transparent';
+                        cursorOutline.style.borderColor = 'rgba(44, 46, 44, 0.4)';
+                    });
+                });
+            } else {
+                cursorDot.style.display = 'none';
+                cursorOutline.style.display = 'none';
+                document.body.style.cursor = 'auto';
+            }
+
+            // --- 3. Scroll Reveal & Progress Bar ---
+            const reveals = document.querySelectorAll('.reveal');
+            const progressBar = document.getElementById('scroll-progress');
+
+            const revealOnScroll = () => {
+                let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                let scrolled = (winScroll / height) * 100;
+                progressBar.style.width = scrolled + "%";
+
+                const windowHeight = window.innerHeight;
+                reveals.forEach(reveal => {
+                    const revealTop = reveal.getBoundingClientRect().top;
+                    const revealPoint = 100; // triggers 100px before appearing
+                    if (revealTop < windowHeight - revealPoint) {
+                        reveal.classList.add('active');
+                    }
+                });
+            };
+            window.addEventListener('scroll', revealOnScroll);
+            revealOnScroll(); // Trigger once on load
+
+            // --- 4. Interactive Particles (Fireflies/Dust) ---
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            let particlesArray = [];
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                initParticles();
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 0.5;
+                    this.speedX = Math.random() * 1 - 0.5;
+                    this.speedY = Math.random() * 1 - 0.5;
+                    // Colors: soft whites, pale golds
+                    this.color = Math.random() > 0.5 ? 'rgba(255, 255, 255, 0.6)' : 'rgba(209, 201, 184, 0.6)';
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+
+                    // Slight interaction with mouse if on desktop
+                    if (window.matchMedia("(pointer: fine)").matches) {
+                        let dx = mouseX - this.x;
+                        let dy = mouseY - this.y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < 100) {
+                            // gently push away
+                            this.x -= dx * 0.01;
+                            this.y -= dy * 0.01;
+                        }
+                    }
+
+                    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+                }
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Add subtle glow
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = this.color;
+                }
+            }
+
+            function initParticles() {
+                particlesArray = [];
+                let numberOfParticles = (canvas.width * canvas.height) / 15000; // Density
+                for (let i = 0; i < numberOfParticles; i++) {
+                    particlesArray.push(new Particle());
+                }
+            }
+            
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                    particlesArray[i].draw();
+                }
+                requestAnimationFrame(animateParticles);
+            }
+            
+            initParticles();
+            animateParticles();
+
+            // --- 5. Audio Handling (Background & Ambient) ---
+            const bgMusic = document.getElementById('bg-music');
+            const ambientMusic = document.getElementById('ambient-music');
+            const musicToggleBtn = document.getElementById('music-toggle');
+            let isMusicPlaying = false;
+
+            // Set volumes
+            bgMusic.volume = 0.4;
+            ambientMusic.volume = 0.2;
+
+            function playAudio() {
+                // Browser policies require user interaction before playing audio.
+                // We catch the promises to prevent Unhandled Promise Rejection errors.
+                let bgPromise = bgMusic.play();
+                let ambPromise = ambientMusic.play();
+
+                if (bgPromise !== undefined) {
+                    bgPromise.then(_ => {
+                        isMusicPlaying = true;
+                        updateAudioIcon();
+                    }).catch(error => {
+                        console.log("Autoplay prevented by browser. Waiting for explicit click.");
+                        isMusicPlaying = false;
+                        updateAudioIcon();
+                    });
+                }
+
+                if (ambPromise !== undefined) {
+                    ambPromise.catch(error => {
+                        console.log("Ambient autoplay prevented by browser.");
+                    });
+                }
+            }
+
+            function toggleAudio() {
+                if (isMusicPlaying) {
+                    bgMusic.pause();
+                    ambientMusic.pause();
+                    isMusicPlaying = false;
+                    updateAudioIcon();
+                } else {
+                    playAudio();
+                }
+            }
+
+            function updateAudioIcon() {
+                if (isMusicPlaying) {
+                    // Sound Waves icon
+                    musicToggleBtn.innerHTML = `
+                        <svg class="w-6 h-6 text-moss animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+                        </svg>`;
+                } else {
+                    // Muted icon
+                    musicToggleBtn.innerHTML = `
+                        <svg class="w-6 h-6 text-charcoal opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.693L5.586 15z" clip-rule="evenodd" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/>
+                        </svg>`;
+                }
+            }
+
+            // Attempt autoplay on first meaningful interaction (scroll, click, touch)
+            window.addEventListener('scroll', playAudio, { once: true });
+            document.body.addEventListener('click', playAudio, { once: true });
+            document.body.addEventListener('touchstart', playAudio, { once: true });
+            
+            // Manual toggle button
+            musicToggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // prevent triggering the body click above
+                toggleAudio();
+            });
+
+            // --- 6. Parallax effect for Collage (Subtle) ---
+            const collage = document.getElementById('collage');
+            window.addEventListener('mousemove', (e) => {
+                if(window.matchMedia("(pointer: fine)").matches) {
+                    const x = (e.clientX / window.innerWidth - 0.5) * 20;
+                    const y = (e.clientY / window.innerHeight - 0.5) * 20;
+                    collage.style.transform = `translate(${x}px, ${y}px)`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
