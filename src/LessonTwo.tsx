@@ -422,6 +422,7 @@ function FinaleDesk() {
       <footer className="lesson2-end">
         <p>&lt;/end_of_manuscript&gt;</p>
         <small>Department of Web Poetics 2026</small>
+        <small>By Luiese 🤍</small>
       </footer>
     </section>
   );
