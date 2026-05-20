@@ -1,13 +1,37 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FooterSection, HeroSection, IntroSection, MediaSection, MemoriesSection, Navigation, ParticleCanvas, SectionDivider, SemanticsSection, SkeletonSection, StepsSection } from "./components";
+import LessonTwo from "./LessonTwo";
 import "./styles.css";
 
 type MusicState = "muted" | "playing";
+type Page = "lesson-1" | "lesson-2";
+
+function getPageFromHash(): Page {
+  return window.location.hash === "#lesson-2" ? "lesson-2" : "lesson-1";
+}
 
 function App() {
+  const [page, setPage] = useState<Page>(getPageFromHash);
   const [musicState, setMusicState] = useState<MusicState>("muted");
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const augustSong = new URL("../august.mp3", import.meta.url).href;
+
+  useEffect(() => {
+    const onHashChange = () => setPage(getPageFromHash());
+
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
+  if (page === "lesson-2") {
+    return (
+      <LessonTwo
+        onNavigateHome={() => {
+          window.location.hash = "lesson-1";
+        }}
+      />
+    );
+  }
 
   const collageImages = useMemo(
     () => [
@@ -210,6 +234,16 @@ function App() {
   return (
     <div className="app-shell">
       <div id="scroll-progress" />
+
+      <button
+        className="lesson-switcher"
+        type="button"
+        onClick={() => {
+          window.location.hash = "lesson-2";
+        }}
+      >
+        Lesson 2
+      </button>
 
       <div className="film-grain" />
       <div className="fog-bg" />

@@ -39,7 +39,7 @@ export function HeroSection() {
         The Art <span className="hero-accent">of the</span> Web
       </h1>
       <p className="hero-copy">
-        Passed down like folk songs. A beginner's diary to writing HTML, the foundation of every story told online.
+        Passed down like folk songs. A beginner's diary to writing HTML, the foundation of every story told.
       </p>
       <div className="scroll-cue">
         <span>Scroll Gently</span>
