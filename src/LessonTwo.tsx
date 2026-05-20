@@ -98,6 +98,16 @@ function CinematicIntro({ onComplete }: { onComplete: () => void }) {
   const [drag, setDrag] = useState({ x: 0, y: 0 });
   const [isFlying, setIsFlying] = useState(false);
   const startPoint = useRef({ x: 0, y: 0 });
+  const completeIntro = (xDirection = 1, yDirection = -1) => {
+    if (isFlying) return;
+
+    setIsFlying(true);
+    setDrag({
+      x: window.innerWidth * xDirection * 1.4,
+      y: window.innerHeight * yDirection * 1.2,
+    });
+    window.setTimeout(onComplete, 900);
+  };
 
   const onPointerDown = (event: PointerEvent<HTMLButtonElement>) => {
     if (isFlying) return;
@@ -120,25 +130,20 @@ function CinematicIntro({ onComplete }: { onComplete: () => void }) {
     const distance = Math.hypot(drag.x, drag.y);
 
     if (distance < 50) {
-      setDrag({ x: 0, y: 0 });
+      completeIntro(1, -1);
       return;
     }
 
-    setIsFlying(true);
     const dirX = drag.x >= 0 ? 1 : -1;
     const dirY = drag.y >= 0 ? 1 : -1;
-    setDrag({
-      x: window.innerWidth * dirX * 1.4,
-      y: window.innerHeight * dirY * 1.2,
-    });
-    window.setTimeout(onComplete, 900);
+    completeIntro(dirX, dirY);
   };
 
   return (
     <div className={`lesson2-intro ${isFlying ? "lesson2-intro-flying" : ""}`}>
       <div className="lesson2-old-wall" />
       <div className="lesson2-intro-copy">
-        <p>Swipe the paper plane to begin</p>
+        <p>Tap or swipe the paper plane to begin</p>
         <span />
       </div>
       <button
@@ -460,7 +465,7 @@ export default function LessonTwo({ onNavigateHome }: LessonTwoProps) {
   const [showIntro, setShowIntro] = useState(true);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
+    window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
   return (
