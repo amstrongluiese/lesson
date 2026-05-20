@@ -1,4 +1,4 @@
-import { PointerEvent, useEffect, useMemo, useRef, useState } from "react";
+import { PointerEvent, useEffect, useRef, useState } from "react";
 
 type LessonTwoProps = {
   onNavigateHome: () => void;
@@ -17,79 +17,40 @@ function RealisticPaperPlane() {
   return (
     <svg className="lesson2-plane-svg" viewBox="0 0 160 180" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <filter id="lesson2-paper-grain" x="-20%" y="-20%" width="140%" height="140%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" result="noise" />
-          <feColorMatrix
-            type="matrix"
-            values="1 0 0 0 0  0 0.9 0 0 0  0 0.8 0 0 0  0 0 0 0.15 0"
-            in="noise"
-            result="coloredNoise"
-          />
-          <feBlend in="SourceGraphic" in2="coloredNoise" mode="multiply" />
-        </filter>
         <linearGradient id="lesson2-left-outer" x1="100%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#e3dfd5" />
-          <stop offset="100%" stopColor="#a39f97" />
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="100%" stopColor="#e9e5da" />
         </linearGradient>
         <linearGradient id="lesson2-right-outer" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#fdfcf8" />
-          <stop offset="100%" stopColor="#d1cdc5" />
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="100%" stopColor="#f2eee4" />
         </linearGradient>
         <linearGradient id="lesson2-left-inner" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#6e6b66" />
-          <stop offset="100%" stopColor="#8f8c85" />
+          <stop offset="0%" stopColor="#d8d2c4" />
+          <stop offset="100%" stopColor="#eee9de" />
         </linearGradient>
         <linearGradient id="lesson2-right-inner" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#b8b4ab" />
-          <stop offset="100%" stopColor="#8f8c85" />
+          <stop offset="0%" stopColor="#f6f2e9" />
+          <stop offset="100%" stopColor="#ddd6c8" />
         </linearGradient>
       </defs>
-      <g filter="url(#lesson2-paper-grain)">
+      <g>
         <polygon points="80,10 10,110 70,125" fill="url(#lesson2-left-outer)" />
         <polygon points="80,10 150,100 90,120" fill="url(#lesson2-right-outer)" />
         <polygon points="80,10 70,125 80,165" fill="url(#lesson2-left-inner)" />
         <polygon points="80,10 90,120 80,165" fill="url(#lesson2-right-inner)" />
-        <line x1="80" y1="10" x2="80" y2="165" stroke="rgba(0,0,0,0.4)" strokeWidth="1.5" />
-        <line x1="80" y1="10" x2="70" y2="125" stroke="rgba(0,0,0,0.15)" strokeWidth="1" />
-        <line x1="80" y1="10" x2="90" y2="120" stroke="rgba(255,255,255,0.4)" strokeWidth="1" />
+        <line x1="80" y1="10" x2="80" y2="165" stroke="rgba(64,55,42,0.24)" strokeWidth="1.4" />
+        <line x1="80" y1="10" x2="70" y2="125" stroke="rgba(64,55,42,0.12)" strokeWidth="1" />
+        <line x1="80" y1="10" x2="90" y2="120" stroke="rgba(255,255,255,0.65)" strokeWidth="1" />
       </g>
     </svg>
   );
 }
 
 function BackgroundEffects() {
-  const particles = useMemo(
-    () =>
-      Array.from({ length: 35 }, (_, index) => ({
-        id: index,
-        size: 1 + Math.random() * 3,
-        left: Math.random() * 100,
-        delay: Math.random() * 15,
-        duration: 10 + Math.random() * 20,
-      })),
-    []
-  );
-
   return (
     <div className="lesson2-background" aria-hidden="true">
-      {particles.map((particle) => (
-        <span
-          key={particle.id}
-          className="lesson2-particle"
-          style={{
-            width: `${particle.size}px`,
-            height: `${particle.size}px`,
-            left: `${particle.left}%`,
-            animationDelay: `-${particle.delay}s`,
-            animationDuration: `${particle.duration}s`,
-          }}
-        />
-      ))}
-      <div className="lesson2-floating-paper lesson2-floating-paper-one lesson2-crumpled-paper">
-        <p>scratch idea #4...</p>
-      </div>
-      <div className="lesson2-floating-paper lesson2-floating-paper-two lesson2-torn-paper" />
-      <div className="lesson2-floating-paper lesson2-floating-paper-three lesson2-polaroid" />
+      <div className="lesson2-background-wash" />
     </div>
   );
 }
@@ -422,8 +383,8 @@ function FinaleDesk() {
       <footer className="lesson2-end">
         <p>&lt;/end_of_manuscript&gt;</p>
         <small>Department of Web Poetics 2026</small>
-        <br> </br>
-        <small>By Luiese 🤍</small>
+        <br />
+        <small>By Luiese</small>
       </footer>
     </section>
   );

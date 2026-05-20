@@ -23,16 +23,6 @@ function App() {
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
-  if (page === "lesson-2") {
-    return (
-      <LessonTwo
-        onNavigateHome={() => {
-          window.location.hash = "lesson-1";
-        }}
-      />
-    );
-  }
-
   const collageImages = useMemo(
     () => [
       { src: new URL("../images/1.jpg", import.meta.url).href, alt: "Memory One", caption: "the first sketch", rotation: -8, top: "5%", left: "5%", width: 235 },
@@ -231,6 +221,16 @@ function App() {
     audio.pause();
   }, [musicState]);
 
+  if (page === "lesson-2") {
+    return (
+      <LessonTwo
+        onNavigateHome={() => {
+          window.location.hash = "lesson-1";
+        }}
+      />
+    );
+  }
+
   return (
     <div className="app-shell">
       <div id="scroll-progress" />
@@ -283,7 +283,7 @@ function App() {
             setMusicState((current) => (current === "playing" ? "muted" : "playing"));
           }}
         >
-          <span className="music-toggle-label">{musicState === "playing" ? "♫" : "♪"}</span>
+          <span className="music-toggle-label">{musicState === "playing" ? "On" : "Off"}</span>
         </button>
       </div>
 

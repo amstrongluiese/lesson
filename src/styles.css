@@ -1029,8 +1029,8 @@ pre {
   position: relative;
   min-height: 100vh;
   overflow-x: hidden;
-  background: #030303;
-  color: #e8e6e1;
+  background: #f4f0e7;
+  color: #2f2a22;
   font-family: "Cormorant Garamond", serif;
 }
 
@@ -1061,15 +1061,11 @@ pre {
 }
 
 .lesson2-film-grain {
-  z-index: 70;
-  opacity: 0.05;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  display: none;
 }
 
 .lesson2-vignette {
-  z-index: 69;
-  background: radial-gradient(circle, rgba(0, 0, 0, 0) 30%, rgba(3, 3, 3, 0.98) 100%);
+  display: none;
 }
 
 .lesson2-background {
@@ -1080,73 +1076,33 @@ pre {
   pointer-events: none;
 }
 
-.lesson2-particle {
+.lesson2-background-wash {
   position: absolute;
-  bottom: -10vh;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(232, 230, 225, 0.8) 0%, rgba(232, 230, 225, 0) 70%);
-  mix-blend-mode: screen;
-  animation: lesson2FloatUp 15s infinite linear;
-}
-
-.lesson2-floating-paper {
-  position: absolute;
-  opacity: 0.12;
-  filter: blur(4px);
-  animation: lesson2Drift 16s infinite ease-in-out;
-}
-
-.lesson2-floating-paper-one {
-  top: 10%;
-  left: -5%;
-  width: 16rem;
-  height: 16rem;
-  padding: 2rem;
-  transform: rotate(-10deg);
-}
-
-.lesson2-floating-paper-two {
-  right: -10%;
-  bottom: 20%;
-  width: 28rem;
-  height: 14rem;
-}
-
-.lesson2-floating-paper-three {
-  top: 60%;
-  left: 15%;
-  width: 18rem;
-  height: 20rem;
-  filter: blur(8px);
+  inset: 0;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255, 255, 255, 0.72), transparent 28rem),
+    linear-gradient(135deg, #f8f5ee 0%, #eee7d9 48%, #f3efe7 100%);
 }
 
 .lesson2-torn-paper,
 .lesson2-crumpled-paper {
-  color: #1c1c1c;
-  box-shadow: 3px 8px 20px rgba(0, 0, 0, 0.65);
+  color: #2f2a22;
+  box-shadow: 0 12px 28px rgba(67, 52, 31, 0.14);
 }
 
 .lesson2-torn-paper {
-  background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px),
-    linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
-    #e8e6e1;
-  background-size: 20px 20px;
+  background: #fffdf8;
   clip-path: polygon(2% 1%, 98% 3%, 99% 98%, 3% 96%, 0% 50%);
 }
 
 .lesson2-crumpled-paper {
-  background:
-    linear-gradient(135deg, transparent 30%, rgba(0, 0, 0, 0.05) 32%, transparent 34%),
-    linear-gradient(45deg, transparent 60%, rgba(0, 0, 0, 0.06) 62%, transparent 64%),
-    #cfc9c0;
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2), 3px 8px 20px rgba(0, 0, 0, 0.7);
+  background: #fffaf0;
 }
 
 .lesson2-polaroid {
   background: #fdfdfd;
   padding: 12px 12px 45px;
-  box-shadow: 5px 10px 25px rgba(0, 0, 0, 0.75), inset 0 0 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 16px 34px rgba(67, 52, 31, 0.18);
 }
 
 .lesson2-polaroid img {
@@ -1174,16 +1130,12 @@ pre {
   display: grid;
   place-items: center;
   overflow: hidden;
-  background: #020202;
+  background: #f4f0e7;
   transition: opacity 0.25s ease;
 }
 
 .lesson2-old-wall {
-  position: absolute;
-  inset: 0;
-  opacity: 0.1;
-  mix-blend-mode: overlay;
-  background-image: url("https://www.transparenttextures.com/patterns/old-wall.png");
+  display: none;
 }
 
 .lesson2-intro-flying {
@@ -1207,7 +1159,7 @@ pre {
 
 .lesson2-intro-copy p {
   margin: 0;
-  color: #e8e6e1;
+  color: #4f4638;
   font-size: clamp(1.7rem, 4vw, 2.4rem);
 }
 
@@ -1217,7 +1169,7 @@ pre {
   width: 1px;
   height: 3.5rem;
   margin: 1.2rem auto 0;
-  background: linear-gradient(to bottom, rgba(232, 230, 225, 0.8), transparent);
+  background: linear-gradient(to bottom, rgba(79, 70, 56, 0.55), transparent);
   animation: lesson2Pulse 2s infinite ease-in-out;
 }
 
@@ -1241,7 +1193,7 @@ pre {
 .lesson2-plane-svg {
   width: min(42vw, 180px);
   height: auto;
-  filter: drop-shadow(8px 25px 20px rgba(0, 0, 0, 0.8));
+  filter: drop-shadow(0 22px 24px rgba(67, 52, 31, 0.2));
 }
 
 .lesson2-content {
@@ -1252,7 +1204,7 @@ pre {
 
 .lesson2-hero {
   position: relative;
-  min-height: 100vh;
+  min-height: 92vh;
   display: grid;
   place-items: center;
   padding: 6rem 1.25rem;
@@ -1265,17 +1217,11 @@ pre {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: radial-gradient(circle at center, transparent 0%, #030303 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(244, 240, 231, 0.9));
 }
 
 .lesson2-hero-photo {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  opacity: 0.06;
-  mix-blend-mode: overlay;
-  background: url("https://images.unsplash.com/photo-1518826727449-ae1dc237dc6b?auto=format&fit=crop&w=1600&q=80")
-    center/cover no-repeat;
+  display: none;
 }
 
 .lesson2-hero-inner {
@@ -1286,23 +1232,23 @@ pre {
 
 .lesson2-kicker {
   margin: 0 0 1.5rem;
-  color: #8a8a8a;
+  color: #766957;
   font-size: clamp(1.9rem, 5vw, 2.7rem);
   transform: rotate(-2deg);
 }
 
 .lesson2-hero h1 {
   margin: 0 0 2rem;
-  color: #e8e6e1;
+  color: #2f2a22;
   font-size: clamp(3.4rem, 10vw, 7.4rem);
   font-weight: 300;
   letter-spacing: 0.11em;
   line-height: 0.98;
-  text-shadow: 0 5px 18px rgba(0, 0, 0, 1);
+  text-shadow: none;
 }
 
 .lesson2-hero h1 span {
-  color: #a0a0a0;
+  color: #7d705d;
   font-style: italic;
   letter-spacing: 0;
 }
@@ -1314,8 +1260,8 @@ pre {
   border-top: 1px solid #4a4a4a;
   border-bottom: 1px solid #4a4a4a;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.3);
-  color: #8a8a8a;
+  background: rgba(255, 253, 248, 0.86);
+  color: #665b4d;
   font-size: 0.86rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1326,13 +1272,13 @@ pre {
   z-index: 5;
   width: 40px;
   height: 40px;
-  border: 2px solid #8a8a8a;
+  border: 1px solid rgba(79, 70, 56, 0.24);
   border-radius: 999px;
   display: grid;
   place-items: center;
-  background: #111;
-  color: #e8e6e1;
-  box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.2), 3px 3px 10px rgba(0, 0, 0, 0.9);
+  background: #fffdf8;
+  color: #4f4638;
+  box-shadow: 0 10px 22px rgba(67, 52, 31, 0.13);
   font-family: "Courier Prime", monospace;
   font-size: 1.2rem;
   font-weight: 700;
@@ -1364,7 +1310,7 @@ pre {
 }
 
 .lesson2-scroll-note {
-  color: #4a4a4a;
+  color: #7d705d;
   font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1388,7 +1334,7 @@ pre {
 
 .lesson2-section h2 {
   margin: 0 0 0.4rem;
-  color: #8a8a8a;
+  color: #8a7860;
   font-size: clamp(2rem, 5vw, 3rem);
   font-style: italic;
   font-weight: 400;
@@ -1397,8 +1343,8 @@ pre {
 .lesson2-section h3 {
   margin: 0 0 3rem;
   padding-bottom: 1.4rem;
-  border-bottom: 1px solid rgba(74, 74, 74, 0.42);
-  color: #e8e6e1;
+  border-bottom: 1px solid rgba(79, 70, 56, 0.18);
+  color: #2f2a22;
   font-size: clamp(3rem, 8vw, 5.4rem);
   font-weight: 300;
   line-height: 1;
@@ -1407,29 +1353,28 @@ pre {
 .lesson2-journal {
   position: relative;
   padding: clamp(1.6rem, 5vw, 3rem);
-  border: 1px solid rgba(232, 230, 225, 0.05);
-  background: rgba(20, 20, 20, 0.7);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(79, 70, 56, 0.12);
+  border-radius: 8px;
+  background: #fffdf8;
+  box-shadow: 0 18px 42px rgba(67, 52, 31, 0.12);
 }
 
 .lesson2-journal p {
-  color: #8a8a8a;
+  color: #554b3f;
   font-size: 1.18rem;
   font-weight: 500;
   line-height: 1.7;
 }
 
 .lesson2-journal strong {
-  color: #e8e6e1;
+  color: #2f2a22;
 }
 
 .lesson2-journal h4 {
   margin: 2.5rem 0 1rem;
   padding-left: 1rem;
-  border-left: 2px solid #3b332b;
-  color: #e8e6e1;
+  border-left: 2px solid #b89c75;
+  color: #2f2a22;
   font-family: "Courier Prime", monospace;
   font-size: 1.08rem;
 }
@@ -1450,37 +1395,33 @@ pre {
   overflow-x: auto;
   margin-top: 1rem;
   padding: 1.35rem;
-  border-left: 2px solid #4a4a4a;
-  border-radius: 4px;
-  background: rgba(8, 8, 8, 0.92);
-  box-shadow: inset 0 5px 15px rgba(0, 0, 0, 1);
-  color: #d0d0d0;
+  border-left: 2px solid #b89c75;
+  border-radius: 8px;
+  background: #2e2a24;
+  box-shadow: none;
+  color: #f6efe3;
   font-size: 0.95rem;
   line-height: 1.7;
 }
 
 .lesson2-code::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(transparent 0, transparent 24px, rgba(255, 255, 255, 0.015) 25px);
+  display: none;
 }
 
 .lesson2-code .tag {
-  color: #8b7355;
+  color: #f0c989;
 }
 
 .lesson2-code .attr {
-  color: #a0a0a0;
+  color: #b8d7d4;
 }
 
 .lesson2-code .value {
-  color: #806443;
+  color: #e9a875;
 }
 
 .lesson2-code .muted {
-  color: #4a4a4a;
+  color: #9d9489;
 }
 
 .lesson2-tape {
@@ -1488,9 +1429,8 @@ pre {
   z-index: 2;
   width: 100px;
   height: 28px;
-  background: rgba(232, 230, 225, 0.15);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4), inset 0 0 8px rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(4px);
+  background: rgba(219, 202, 166, 0.48);
+  box-shadow: 0 8px 18px rgba(67, 52, 31, 0.1);
 }
 
 .tape-top {
@@ -1533,7 +1473,7 @@ pre {
   position: absolute;
   top: -2.5rem;
   right: -1.5rem;
-  color: rgba(232, 230, 225, 0.58);
+  color: rgba(79, 70, 56, 0.72);
   font-size: 1.4rem;
   transform: rotate(8deg);
 }
@@ -1543,8 +1483,8 @@ pre {
   z-index: 10;
   min-height: 140vh;
   padding: 5rem 1.25rem 7rem;
-  border-top: 1px solid rgba(74, 74, 74, 0.2);
-  background: #020202;
+  border-top: 1px solid rgba(79, 70, 56, 0.14);
+  background: #eee7d9;
   overflow: hidden;
 }
 
@@ -1558,7 +1498,7 @@ pre {
 
 .lesson2-finale-heading h2 {
   margin: 0 0 1rem;
-  color: #8a8a8a;
+  color: #6f604d;
   font-size: clamp(2rem, 6vw, 3.4rem);
   font-style: italic;
   font-weight: 400;
@@ -1566,7 +1506,7 @@ pre {
 
 .lesson2-finale-heading p {
   margin: 0;
-  color: #4a4a4a;
+  color: #7d705d;
   font-size: 0.75rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1577,11 +1517,11 @@ pre {
   width: 6rem;
   height: 1px;
   margin: 1.4rem auto 1rem;
-  background: #4a4a4a;
+  background: #b89c75;
 }
 
 .lesson2-finale-heading em {
-  color: rgba(232, 230, 225, 0.5);
+  color: rgba(79, 70, 56, 0.68);
   font-family: "Nanum Pen Script", cursive;
   font-size: 1.45rem;
   font-style: normal;
@@ -1633,9 +1573,9 @@ pre {
   place-items: center;
   gap: 0.4rem;
   padding: 1.25rem;
-  border: 1px dashed rgba(74, 74, 74, 0.8);
-  background: #1a1a1a;
-  color: #8a8a8a;
+  border: 1px dashed rgba(79, 70, 56, 0.34);
+  background: #fffdf8;
+  color: #6f604d;
   font-family: "Courier Prime", monospace;
   font-size: 0.8rem;
   text-align: center;
@@ -1660,7 +1600,7 @@ pre {
   position: relative;
   z-index: 10;
   margin-top: 4rem;
-  color: #4a4a4a;
+  color: #6f604d;
   text-align: center;
   font-style: italic;
 }
@@ -1695,12 +1635,12 @@ pre {
 }
 
 .lesson2-audio-copy span:first-child {
-  color: #8a8a8a;
+  color: #6f604d;
   font-size: 0.75rem;
 }
 
 .lesson2-audio-copy span:last-child {
-  color: #4a4a4a;
+  color: #8a7860;
   font-size: 1rem;
 }
 
@@ -1709,12 +1649,12 @@ pre {
   overflow: hidden;
   width: 52px;
   height: 52px;
-  border: 1px solid #4a4a4a;
+  border: 1px solid rgba(79, 70, 56, 0.18);
   border-radius: 999px;
   display: grid;
   place-items: center;
-  background: rgba(28, 28, 28, 0.82);
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+  background: #fffdf8;
+  box-shadow: 0 12px 28px rgba(67, 52, 31, 0.16);
   cursor: pointer;
 }
 
@@ -1722,18 +1662,18 @@ pre {
   position: relative;
   width: 40px;
   height: 40px;
-  border: 1px solid rgba(74, 74, 74, 0.5);
+  border: 1px solid rgba(79, 70, 56, 0.18);
   border-radius: 999px;
   display: grid;
   place-items: center;
-  background: #111;
+  background: #f4f0e7;
 }
 
 .lesson2-audio i {
   width: 12px;
   height: 12px;
   border-radius: 999px;
-  background: #3b332b;
+  background: #8a7860;
 }
 
 .is-spinning {

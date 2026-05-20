@@ -144,7 +144,7 @@ export function MediaSection() {
               <span className="chapter-label-inline moss">02.</span> Images
             </h3>
             <p className="section-copy">
-              The <code>{'<img>'}</code> tag places a picture on the wall. It is a "void element"—it has no closing tag. It needs a <code>src</code> and an <code>alt</code>.
+              The <code>{'<img>'}</code> tag places a picture on the wall. It is a "void element" - it has no closing tag. It needs a <code>src</code> and an <code>alt</code>.
             </p>
             <div className="code-block compact">
               <code>
@@ -327,7 +327,7 @@ export function FooterSection() {
   return (
     <footer className="footer reveal">
       <p className="footer-kicker">A Cinematic Study Experience</p>
-      <p className="footer-signoff">By Luiese 🤍</p>
+      <p className="footer-signoff">By Luiese</p>
     </footer>
   );
 }
