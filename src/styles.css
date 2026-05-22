@@ -3491,11 +3491,11 @@ pre {
   min-height: 100dvh;
   overflow: hidden;
   background:
-    radial-gradient(ellipse at 50% 48%, rgba(244, 240, 231, 0.18), transparent 26rem),
-    radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.28), transparent 34rem),
-    rgba(4, 4, 4, 0.8);
-  backdrop-filter: blur(12px) saturate(0.9);
-  -webkit-backdrop-filter: blur(12px) saturate(0.9);
+    radial-gradient(ellipse at 50% 28%, rgba(244, 240, 231, 0.24), transparent 28rem),
+    radial-gradient(ellipse at 50% 70%, rgba(183, 214, 189, 0.08), transparent 24rem),
+    rgba(4, 4, 4, 0.86);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .lesson2-reward-popover::before,
@@ -3506,26 +3506,12 @@ pre {
 }
 
 .lesson2-reward-popover::before {
-  top: -18vh;
-  left: 50%;
-  width: min(92vw, 44rem);
-  height: 138vh;
-  transform: translateX(-50%);
+  inset: 0;
   background:
-    radial-gradient(ellipse at 50% 4%, rgba(255, 255, 255, 0.5), transparent 10%),
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.28) 0%,
-      rgba(244, 240, 231, 0.18) 20%,
-      rgba(183, 214, 189, 0.1) 52%,
-      transparent 84%
-    );
-  clip-path: polygon(47% 0, 53% 0, 86% 100%, 14% 100%);
-  filter: blur(18px);
-  mix-blend-mode: screen;
-  opacity: 0.72;
-  transform-origin: 50% 0;
-  animation: lesson2SpotlightSweep 7.5s infinite cubic-bezier(0.45, 0, 0.55, 1);
+    linear-gradient(180deg, rgba(244, 240, 231, 0.2), transparent 58%),
+    radial-gradient(ellipse at 50% 18%, rgba(255, 255, 255, 0.22), transparent 24rem);
+  opacity: 0.58;
+  animation: lesson2SpotlightSweep 6s infinite ease-in-out;
 }
 
 .lesson2-reward-popover::after {
@@ -3590,16 +3576,14 @@ pre {
 
 .lesson2-reward-spotlight {
   position: absolute;
-  inset: -20%;
+  inset: 0;
   background:
-    radial-gradient(ellipse at 50% 26%, rgba(255, 255, 255, 0.24), transparent 18%),
-    linear-gradient(105deg, transparent 24%, rgba(255, 255, 255, 0.08) 38%, rgba(255, 255, 255, 0.24) 49%, rgba(183, 214, 189, 0.1) 56%, transparent 72%),
-    radial-gradient(ellipse at 50% 52%, rgba(244, 240, 231, 0.16), transparent 42%);
-  background-size: auto, 260% 100%, auto;
-  background-position: center, 160% 0, center;
-  filter: blur(1.5px);
-  mix-blend-mode: screen;
-  animation: lesson2RewardShine 5.8s infinite cubic-bezier(0.45, 0, 0.55, 1);
+    radial-gradient(ellipse at 50% 30%, rgba(255, 255, 255, 0.18), transparent 18rem),
+    radial-gradient(ellipse at 50% 52%, rgba(183, 214, 189, 0.1), transparent 22rem),
+    linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.09) 50%, transparent 70%);
+  background-size: auto, auto, 220% 100%;
+  background-position: center, center, 120% 0;
+  animation: lesson2RewardShine 5.2s infinite ease-in-out;
   pointer-events: none;
 }
 
@@ -4444,18 +4428,16 @@ pre {
 
 @keyframes lesson2RewardShine {
   0% {
-    background-position: center, 155% 0, center;
+    background-position: center, center, 120% 0;
     opacity: 0.34;
-    transform: translate3d(-1.2%, 0, 0) rotate(-1.5deg) scale(1.02);
   }
   50% {
-    opacity: 0.78;
-    transform: translate3d(1.2%, -0.6%, 0) rotate(1.5deg) scale(1.04);
+    background-position: center, center, 50% 0;
+    opacity: 0.58;
   }
   100% {
-    background-position: center, -55% 0, center;
+    background-position: center, center, -20% 0;
     opacity: 0.34;
-    transform: translate3d(-1.2%, 0, 0) rotate(-1.5deg) scale(1.02);
   }
 }
 
@@ -4485,16 +4467,13 @@ pre {
 
 @keyframes lesson2SpotlightSweep {
   0% {
-    transform: translateX(-50%) rotate(-3deg) scaleX(0.95);
-    opacity: 0.5;
+    opacity: 0.46;
   }
   50% {
-    transform: translateX(-50%) rotate(3deg) scaleX(1.08);
-    opacity: 0.76;
+    opacity: 0.68;
   }
   100% {
-    transform: translateX(-50%) rotate(-3deg) scaleX(0.95);
-    opacity: 0.5;
+    opacity: 0.46;
   }
 }
 

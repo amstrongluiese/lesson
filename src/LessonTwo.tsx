@@ -1007,16 +1007,6 @@ function StudentActivity() {
   const selectArchiveFile = (file?: File) => {
     if (!file) return;
 
-    const lowerName = file.name.toLowerCase();
-    const isAcceptedType = [".html", ".htm", ".css", ".zip"].some((extension) => lowerName.endsWith(extension));
-
-    if (!isAcceptedType) {
-      setUploadStatus("error");
-      setErrorMessage("Only .html, .css, and .zip manuscripts can enter this archive.");
-      playTone(140, 0.08, 0.026);
-      return;
-    }
-
     resetForFile(file);
   };
 
@@ -1247,7 +1237,6 @@ function StudentActivity() {
               id="archive-upload"
               className="lesson2-native-file-input"
               type="file"
-              accept=".html,.htm,.css,.zip"
               onChange={(event) => selectArchiveFile(event.target.files?.[0])}
             />
 
@@ -1275,7 +1264,7 @@ function StudentActivity() {
             >
               <span className="lesson2-drop-icon" aria-hidden="true" />
               <strong>{isDragging ? "Release the manuscript" : "Drag your manuscript here"}</strong>
-              <small>.html, .css, or .zip accepted</small>
+              <small>HTML, CSS, ZIP, PNG, JPG, JPEG, or any archive file</small>
             </button>
 
             <AnimatePresence>
