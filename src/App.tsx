@@ -190,8 +190,8 @@ function App() {
 
   useEffect(() => {
     const onFirstInteraction = (event: Event) => {
-      const target = event.target as HTMLElement | null;
-      if (target?.closest("#music-toggle")) return;
+      const target = event.target;
+      if (target instanceof Element && target.closest("#music-toggle")) return;
 
       setMusicState("playing");
     };
