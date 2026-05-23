@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FooterSection, HeroSection, IntroSection, MediaSection, MemoriesSection, Navigation, ParticleCanvas, SectionDivider, SemanticsSection, SkeletonSection, StepsSection } from "./components";
 import LessonTwo from "./LessonTwo";
+import MusicPlayerGenerator from "./MusicPlayerGenerator";
 import "./styles.css";
 
 type MusicState = "muted" | "playing";
-type Page = "lesson-1" | "lesson-2";
+type Page = "lesson-1" | "lesson-2" | "music";
 
 function getPageFromHash(): Page {
-  return window.location.hash === "#lesson-2" ? "lesson-2" : "lesson-1";
+  return window.location.hash === "#lesson-2" ? "lesson-2" : window.location.hash === "#music" ? "music" : "lesson-1";
 }
 
 function App() {
@@ -231,6 +232,10 @@ function App() {
     );
   }
 
+  if (page === "music") {
+    return <MusicPlayerGenerator />;
+  }
+
   return (
     <div className="app-shell">
       <div id="scroll-progress" />
@@ -243,6 +248,15 @@ function App() {
         }}
       >
         Lesson 2
+      </button>
+
+      <button
+        className="lesson-switcher"
+        style={{ top: "60px" }}
+        type="button"
+        onClick={() => { window.location.hash = "music"; }}
+      >
+        Music Gen
       </button>
 
       <div className="film-grain" />

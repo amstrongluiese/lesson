@@ -29,6 +29,14 @@ body {
   overflow-x: hidden;
 }
 
+body {
+  font-family: 'Inter', 'Cormorant Garamond', serif;
+}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0f0f13; }
+::-webkit-scrollbar-thumb { background: #2d2d39; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #4b4b5e; }
+
 button,
 a {
   font: inherit;

@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetic Player Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0b0f;
+            color: #f3f4f6;
+        }
+
+        /* Custom Scrollbar for the sidebar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f0f13; }
+        ::-webkit-scrollbar-thumb { background: #2d2d39; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4b4b5e; }
+
+        /* Custom Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 18px; width: 18px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            border: 2px solid #1a1a24;
+            transition: transform 0.1s ease, background-color 0.1s ease;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            background-color: #f3f4f6;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 6px;
+            cursor: pointer;
+            background: #1e1e28;
+            border-radius: 3px;
+        }
+        input[type=range]:focus { outline: none; }
+        
+        .preview-container {
+            background-image: linear-gradient(45deg, #121216 25%, transparent 25%), 
+                              linear-gradient(-45deg, #121216 25%, transparent 25%), 
+                              linear-gradient(45deg, transparent 75%, #121216 75%), 
+                              linear-gradient(-45deg, transparent 75%, #121216 75%);
+            background-size: 24px 24px;
+            background-position: 0 0, 0 12px, 12px -12px, -12px 0px;
+        }
+
+        /* Custom glassmorphism styles */
+        .glass-sidebar {
+            background: rgba(18, 18, 24, 0.85);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col md:flex-row overflow-hidden">
+
+    <!-- Sidebar Controls -->
+    <div class="w-full md:w-[420px] bg-[#121216] h-1/2 md:h-full overflow-y-auto border-b md:border-b-0 md:border-r border-[#1e1e28] shrink-0 flex flex-col z-10">
+        <div class="p-6 space-y-8 flex-1">
+            
+            <!-- Header -->
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-black tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">STORY DESIGNER</h1>
+                    <p class="text-[11px] text-gray-400 mt-0.5 tracking-wider font-semibold uppercase">Aesthetic Music Poster Generator</p>
+                </div>
+                <div class="bg-white/10 text-[10px] uppercase tracking-widest font-black px-2.5 py-1 rounded-full text-white">PRO</div>
+            </div>
+
+            <!-- Image Upload Section -->
+            <div class="space-y-3">
+                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">Background Wallpaper</label>
+                <div class="flex items-center justify-center w-full">
+                    <label for="imageInput" class="flex flex-col items-center justify-center w-full h-28 border border-dashed border-[#2d2d39] rounded-xl cursor-pointer bg-[#171721] hover:bg-[#1c1c28] hover:border-gray-500 transition-all duration-300">
+                        <div class="flex flex-col items-center justify-center pt-4 pb-4 text-gray-400">
+                            <svg class="w-6 h-6 mb-2 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <p class="text-xs font-semibold text-gray-300">Click to upload photo</p>
+                        </div>
+                        <input id="imageInput" type="file" class="hidden" accept="image/*" onchange="handleImageUpload(event)" />
+                    </label>
+                </div>
+            </div>
+
+            <!-- Track Details Section -->
+            <div class="space-y-4">
+                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">Track Metadata</label>
+                <div class="space-y-3">
+                    <div class="relative">
+                        <span class="absolute left-3 top-2.5 text-[10px] text-gray-500 font-bold uppercase">Song</span>
+                        <input type="text" id="inTitle" value="MIST" class="w-full bg-[#171721] border border-[#2d2d39] rounded-lg pl-14 pr-4 py-2 text-sm text-white focus:outline-none focus:border-white focus:ring-1 focus:ring-white/20 transition duration-200" oninput="updateState('title', this.value)">
+                    </div>
+                    <div class="relative">
+                        <span class="absolute left-3 top-2.5 text-[10px] text-gray-500 font-bold uppercase">Artist</span>
+                        <input type="text" id="inArtist" value="ATEEZ" class="w-full bg-[#171721] border border-[#2d2d39] rounded-lg pl-14 pr-4 py-2 text-sm text-white focus:outline-none focus:border-white focus:ring-1 focus:ring-white/20 transition duration-200" oninput="updateState('artist', this.value)">
+                    </div>
+                    
+                    <div class="flex gap-3">
+                        <div class="flex-1">
+                            <label class="text-[9px] text-gray-400 uppercase tracking-wider font-semibold">Start Timestamp</label>
+                            <input type="text" id="inTimeCurrent" value="2:01" class="w-full bg-[#171721] border border-[#2d2d39] rounded-lg px-3 py-2 text-white text-xs focus:outline-none focus:border-white transition" oninput="updateState('timeCurrent', this.value)">
+                        </div>
+                        <div class="flex-1">
+                            <label class="text-[9px] text-gray-400 uppercase tracking-wider font-semibold">End Timestamp</label>
+                            <input type="text" id="inTimeTotal" value="3:19" class="w-full bg-[#171721] border border-[#2d2d39] rounded-lg px-3 py-2 text-white text-xs focus:outline-none focus:border-white transition" oninput="updateState('timeTotal', this.value)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UI Visibility Settings -->
+            <div class="space-y-4 bg-[#171721] p-4 rounded-xl border border-[#2d2d39]/50">
+                <label class="text-[11px] font-bold text-gray-300 uppercase tracking-wider block">Visible Elements</label>
+                <div class="space-y-3">
+                    <!-- Back Button Toggle -->
+                    <div class="flex items-center justify-between p-2 bg-[#121216] rounded-lg px-3">
+                        <span class="text-xs text-gray-300 font-medium">Back Button</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="chkBackButton" checked class="sr-only peer" onchange="updateState('showBackButton', this.checked)">
+                            <div class="w-9 h-5 bg-[#2d2d39] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-white peer-checked:after:bg-[#121216] peer-checked:after:border-[#121216]"></div>
+                        </label>
+                    </div>
+
+                    <!-- Song details Toggle -->
+                    <div class="flex items-center justify-between p-2 bg-[#121216] rounded-lg px-3">
+                        <span class="text-xs text-gray-300 font-medium">Title & Artist</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="chkDetails" checked class="sr-only peer" onchange="updateState('showDetails', this.checked)">
+                            <div class="w-9 h-5 bg-[#2d2d39] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-white peer-checked:after:bg-[#121216] peer-checked:after:border-[#121216]"></div>
+                        </label>
+                    </div>
+
+                    <!-- Heart Toggle -->
+                    <div class="flex items-center justify-between p-2 bg-[#121216] rounded-lg px-3">
+                        <span class="text-xs text-gray-300 font-medium">Heart Icon</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="chkHeart" checked class="sr-only peer" onchange="updateState('showHeart', this.checked)">
+                            <div class="w-9 h-5 bg-[#2d2d39] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-white peer-checked:after:bg-[#121216] peer-checked:after:border-[#121216]"></div>
+                        </label>
+                    </div>
+
+                    <!-- Timeline Toggle -->
+                    <div class="flex items-center justify-between p-2 bg-[#121216] rounded-lg px-3">
+                        <span class="text-xs text-gray-300 font-medium">Timeline Bar & Times</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="chkTimeline" checked class="sr-only peer" onchange="updateState('showTimeline', this.checked)">
+                            <div class="w-9 h-5 bg-[#2d2d39] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-white peer-checked:after:bg-[#121216] peer-checked:after:border-[#121216]"></div>
+                        </label>
+                    </div>
+
+                    <!-- Playback Controls Toggle -->
+                    <div class="flex items-center justify-between p-2 bg-[#121216] rounded-lg px-3">
+                        <span class="text-xs text-gray-300 font-medium">Music Playback Buttons</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="chkControls" checked class="sr-only peer" onchange="updateState('showControls', this.checked)">
+                            <div class="w-9 h-5 bg-[#2d2d39] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-400 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-white peer-checked:after:bg-[#121216] peer-checked:after:border-[#121216]"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UI Customization & Drag Controls -->
+            <div class="space-y-5 bg-[#171721] p-4 rounded-xl border border-[#2d2d39]/50">
+                <div class="flex justify-between items-center">
+                    <label class="text-[11px] font-bold text-gray-300 uppercase tracking-wider">Movable Controls</label>
+                    <span class="text-[9px] text-gray-500 bg-[#2d2d39] px-2 py-0.5 rounded-full uppercase">Interactive</span>
+                </div>
+                
+                <!-- Vertical Position -->
+                <div>
+                    <div class="flex justify-between text-xs text-gray-400 mb-2">
+                        <span class="flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg>
+                            Vertical Offset
+                        </span>
+                        <span id="valUiY" class="font-bold text-white">0</span>
+                    </div>
+                    <input type="range" id="slUiY" min="-1000" max="1000" value="0" step="5" oninput="updateState('uiOffsetY', parseInt(this.value)); document.getElementById('valUiY').textContent=this.value">
+                </div>
+                
+                <!-- UI Scale -->
+                <div>
+                    <div class="flex justify-between text-xs text-gray-400 mb-2">
+                        <span class="flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5"></path></svg>
+                            UI Size (Scale)
+                        </span>
+                        <span id="valUiScale" class="font-bold text-white">1.00x</span>
+                    </div>
+                    <input type="range" id="slUiScale" min="0.4" max="1.6" value="1" step="0.01" oninput="updateState('uiScale', parseFloat(this.value)); document.getElementById('valUiScale').textContent=parseFloat(this.value).toFixed(2)+'x'">
+                </div>
+            </div>
+
+            <!-- Filter and Post Effects -->
+            <div class="space-y-5">
+                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">Image Filters & Lighting</label>
+                
+                <!-- Blur -->
+                <div>
+                    <div class="flex justify-between text-xs text-gray-400 mb-2"><span>Aesthetic Blur</span><span id="valBlur" class="font-semibold text-white">0</span></div>
+                    <input type="range" min="0" max="40" value="0" step="0.5" oninput="updateState('blur', this.value); document.getElementById('valBlur').textContent=this.value">
+                </div>
+                
+                <!-- Grain -->
+                <div>
+                    <div class="flex justify-between text-xs text-gray-400 mb-2"><span>Analog Grain Noise</span><span id="valGrain" class="font-semibold text-white">40</span></div>
+                    <input type="range" min="0" max="100" value="40" step="1" oninput="updateState('grain', this.value); document.getElementById('valGrain').textContent=this.value">
+                </div>
+
+                <!-- Brightness -->
+                <div>
+                    <div class="flex justify-between text-xs text-gray-400 mb-2"><span>Brightness Exposure</span><span id="valBrightness" class="font-semibold text-white">85</span></div>
+                    <input type="range" min="20" max="150" value="85" step="1" oninput="updateState('brightness', this.value); document.getElementById('valBrightness').textContent=this.value">
+                </div>
+
+                <!-- Saturation -->
+                <div>
+                    <div class="flex justify-between text-xs text-gray-400 mb-2"><span>Saturation / Vibrancy</span><span id="valSaturation" class="font-semibold text-white">80</span></div>
+                    <input type="range" min="0" max="200" value="80" step="1" oninput="updateState('saturation', this.value); document.getElementById('valSaturation').textContent=this.value">
+                </div>
+                
+                <!-- Vignette / Dark Gradient -->
+                <div>
+                    <div class="flex justify-between text-xs text-gray-400 mb-2"><span>Ambient Shadow Depth</span><span id="valVignette" class="font-semibold text-white">60</span></div>
+                    <input type="range" min="0" max="100" value="60" step="1" oninput="updateState('vignette', this.value); document.getElementById('valVignette').textContent=this.value">
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Action Area -->
+        <div class="p-6 bg-[#0c0c0f] border-t border-[#1e1e28]">
+            <button onclick="exportImage()" class="w-full bg-white text-black font-bold py-3 px-4 rounded-xl hover:bg-gray-200 active:scale-95 transition-all duration-200 flex justify-center items-center gap-2 shadow-lg shadow-white/5">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Export HD Wallpaper (9:16)
+            </button>
+        </div>
+    </div>
+
+    <!-- Live Preview Canvas Panel -->
+    <div class="flex-1 h-1/2 md:h-full preview-container flex flex-col items-center justify-center p-4 md:p-8 relative">
+        <!-- Interactive Tip -->
+        <div class="absolute top-4 left-1/2 transform -translate-x-1/2 bg-black/60 backdrop-blur-md border border-white/10 px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest font-bold text-gray-300 pointer-events-none hidden md:block select-none shadow-md">
+            💡 Drag inside preview to move music interface • Scroll wheel to resize
+        </div>
+
+        <!-- Canvas wrapper matching 9:16 aspect ratio visually -->
+        <div class="relative w-full max-w-[430px] aspect-[9/16] shadow-[0_30px_70px_rgba(0,0,0,0.8)] rounded-2xl overflow-hidden bg-black ring-1 ring-white/15">
+            <canvas id="renderCanvas" class="w-full h-full object-contain"></canvas>
+        </div>
+        
+        <!-- Saved Notification Toast -->
+        <div id="toast" class="absolute top-6 right-6 bg-white text-black font-semibold text-xs px-5 py-3 rounded-xl shadow-2xl transform transition-all duration-300 translate-y-[-150%] opacity-0 z-50 flex items-center gap-2">
+            <span class="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></span>
+            Wallpaper saved successfully!
+        </div>
+    </div>
+
+    <script>
+        // --- Configuration & State ---
+        const CANVAS_W = 1080;
+        const CANVAS_H = 1920;
+        
+        let bgImage = null;
+        let noiseCanvas = null; // Cache for grain
+
+        const state = {
+            title: "MIST",
+            artist: "ATEEZ",
+            timeCurrent: "2:01",
+            timeTotal: "3:19",
+            blur: 0,
+            grain: 40,
+            brightness: 85,
+            saturation: 80,
+            vignette: 60,
+            uiOffsetY: 100, // Move default lower to avoid overlapping top pinned components
+            uiScale: 1.0,
+            showBackButton: true,
+            showDetails: true,
+            showHeart: true,
+            showTimeline: true,
+            showControls: true
+        };
+
+        // --- Core Elements ---
+        const canvas = document.getElementById('renderCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = CANVAS_W;
+        canvas.height = CANVAS_H;
+
+        // Initialize sliders on UI load
+        document.getElementById('slUiY').value = state.uiOffsetY;
+        document.getElementById('valUiY').textContent = state.uiOffsetY;
+
+        // Ensure fonts are loaded before first render
+        document.fonts.ready.then(() => {
+            render();
+        });
+
+        // --- Event Handlers ---
+        function updateState(key, value) {
+            state[key] = value;
+            requestAnimationFrame(render);
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    bgImage = img;
+                    requestAnimationFrame(render);
+                }
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        // --- Helper: Generate Grain ---
+        function generateNoise() {
+            if (noiseCanvas) return noiseCanvas;
+            noiseCanvas = document.createElement('canvas');
+            noiseCanvas.width = CANVAS_W / 2; // Generate at half res for speed
+            noiseCanvas.height = CANVAS_H / 2;
+            const nCtx = noiseCanvas.getContext('2d');
+            const imgData = nCtx.createImageData(noiseCanvas.width, noiseCanvas.height);
+            const data = imgData.data;
+            for (let i = 0; i < data.length; i += 4) {
+                const val = Math.random() * 255;
+                data[i] = val;     // R
+                data[i+1] = val;   // G
+                data[i+2] = val;   // B
+                data[i+3] = 255;   // A
+            }
+            nCtx.putImageData(imgData, 0, 0);
+            return noiseCanvas;
+        }
+
+        // --- Helper: Convert Time string "M:SS" to seconds ---
+        function timeToSeconds(timeStr) {
+            const parts = timeStr.split(':');
+            if (parts.length !== 2) return 0;
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]) || 0;
+        }
+
+        // --- SVG Path Drawer Helper ---
+        function drawPath(ctx, pathStr, x, y, scale, strokeColor, fillColor, strokeWidth = 2, lineCap = 'round', lineJoin = 'round') {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(scale, scale);
+            const p = new Path2D(pathStr);
+            if (fillColor) {
+                ctx.fillStyle = fillColor;
+                ctx.fill(p);
+            }
+            if (strokeColor) {
+                ctx.strokeStyle = strokeColor;
+                ctx.lineWidth = strokeWidth / scale; // Keep absolute stroke width
+                ctx.lineCap = lineCap;
+                ctx.lineJoin = lineJoin;
+                ctx.stroke(p);
+            }
+            ctx.restore();
+        }
+
+        // --- Main Render Engine ---
+        function render() {
+            // 1. Clear Canvas
+            ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+
+            // 2. Draw Background
+            if (bgImage) {
+                // Apply CSS Filters
+                ctx.filter = `blur(${state.blur}px) brightness(${state.brightness}%) saturate(${state.saturation}%)`;
+                
+                // Calculate cover aspect ratio
+                const scale = Math.max(CANVAS_W / bgImage.width, CANVAS_H / bgImage.height);
+                const x = (CANVAS_W / 2) - (bgImage.width / 2) * scale;
+                const y = (CANVAS_H / 2) - (bgImage.height / 2) * scale;
+                
+                ctx.drawImage(bgImage, x, y, bgImage.width * scale, bgImage.height * scale);
+                ctx.filter = 'none'; // reset
+            } else {
+                // Premium default placeholder gradient
+                const grad = ctx.createLinearGradient(0,0, 0, CANVAS_H);
+                grad.addColorStop(0, '#1c1b26');
+                grad.addColorStop(0.5, '#0e0e13');
+                grad.addColorStop(1, '#050508');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0,0, CANVAS_W, CANVAS_H);
+            }
+
+            // 3. Apply Effects (Grain & Dark Gradient/Vignette)
+            if (state.grain > 0) {
+                const noise = generateNoise();
+                ctx.globalAlpha = state.grain / 300; // Adjust opacity intensity
+                ctx.globalCompositeOperation = 'overlay';
+                ctx.drawImage(noise, 0, 0, CANVAS_W, CANVAS_H);
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.globalAlpha = 1.0;
+            }
+
+            if (state.vignette > 0) {
+                // Aesthetic soft dark glow around screen borders
+                const radialGrad = ctx.createRadialGradient(
+                    CANVAS_W/2, CANVAS_H/2, CANVAS_W * 0.4, 
+                    CANVAS_W/2, CANVAS_H/2, CANVAS_H * 0.75
+                );
+                radialGrad.addColorStop(0, 'rgba(0,0,0,0)');
+                radialGrad.addColorStop(1, `rgba(0,0,0,${state.vignette / 100 * 0.85})`);
+                ctx.fillStyle = radialGrad;
+                ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+
+                // Deep dark linear gradient anchored at the bottom to hold text cleanly
+                const linearGrad = ctx.createLinearGradient(0, CANVAS_H * 0.35, 0, CANVAS_H);
+                linearGrad.addColorStop(0, 'rgba(0,0,0,0)');
+                linearGrad.addColorStop(1, `rgba(0,0,0,${state.vignette / 100 * 0.95})`);
+                ctx.fillStyle = linearGrad;
+                ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+            }
+
+            // ==========================================
+            // 4. DRAW Pinned Static Back Button
+            // ==========================================
+            const marginX = 90; 
+            
+            if (state.showBackButton) {
+                const backBtnSize = 110;
+                const backBtnY = 120;
+                
+                // Draw translucent glass rounded capsule
+                ctx.fillStyle = "rgba(18, 18, 24, 0.45)";
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.roundRect(marginX, backBtnY, backBtnSize, backBtnSize, 36);
+                ctx.fill();
+                ctx.stroke();
+                
+                // Draw standard iOS styled '<' icon inside back button
+                ctx.strokeStyle = "#ffffff";
+                ctx.lineWidth = 6;
+                ctx.lineCap = "round";
+                ctx.lineJoin = "round";
+                ctx.beginPath();
+                ctx.moveTo(marginX + 60, backBtnY + 34);
+                ctx.lineTo(marginX + 40, backBtnY + 55);
+                ctx.lineTo(marginX + 60, backBtnY + 76);
+                ctx.stroke();
+            }
+
+            // ==========================================
+            // 5. DRAW INTERACTIVE MUSIC PLAYER CONTROL PANEL
+            // ==========================================
+            ctx.save();
+            
+            // Apply UI Transformations (Move & Scale relative to center)
+            ctx.translate(CANVAS_W / 2, CANVAS_H / 2 + state.uiOffsetY);
+            ctx.scale(state.uiScale, state.uiScale);
+            ctx.translate(-CANVAS_W / 2, -CANVAS_H / 2);
+
+            const textY = 1000;
+
+            // --- Track Title & Artist ---
+            if (state.showDetails) {
+                // Song Title (Extra Bold Minimalist Sans)
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "900 68px 'Inter', sans-serif";
+                ctx.textAlign = "left";
+                ctx.fillText(state.title.toUpperCase(), marginX, textY);
+                
+                // Artist Name
+                ctx.font = "600 42px 'Inter', sans-serif";
+                ctx.fillStyle = "rgba(255, 255, 255, 0.75)";
+                ctx.fillText(state.artist.toUpperCase(), marginX, textY + 70);
+            }
+
+            // --- Elegant Outline Heart Icon (Right-aligned next to Title) ---
+            if (state.showHeart) {
+                const heartPath = "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z";
+                drawPath(ctx, heartPath, CANVAS_W - marginX - 55, textY + 5, 2.5, null, "#ffffff");
+            }
+
+            // --- Progress Timeline ---
+            const barY = 1190;
+            const barWidth = CANVAS_W - (marginX * 2);
+
+            if (state.showTimeline) {
+                // Calculate progress percentage
+                const curSec = timeToSeconds(state.timeCurrent);
+                const totSec = timeToSeconds(state.timeTotal);
+                let progress = totSec > 0 ? curSec / totSec : 0;
+                if (progress > 1) progress = 1;
+                if (progress < 0) progress = 0;
+
+                const activeWidth = barWidth * progress;
+
+                // Translucent Timeline Track Line
+                ctx.fillStyle = "rgba(255, 255, 255, 0.16)";
+                ctx.beginPath();
+                ctx.roundRect(marginX, barY, barWidth, 8, 4);
+                ctx.fill();
+
+                // Highlighted Active Progress Track Line
+                ctx.fillStyle = "#ffffff";
+                ctx.beginPath();
+                ctx.roundRect(marginX, barY, activeWidth, 8, 4);
+                ctx.fill();
+
+                // Progress Slider Knob (Clean white circle dot)
+                ctx.beginPath();
+                ctx.arc(marginX + activeWidth, barY + 4, 15, 0, Math.PI * 2);
+                ctx.fill();
+
+                // --- Timestamps ---
+                ctx.font = "500 28px 'Inter', sans-serif";
+                ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+                ctx.textAlign = "left";
+                ctx.fillText(state.timeCurrent, marginX, barY + 52);
+                
+                ctx.textAlign = "right";
+                ctx.fillText(state.timeTotal, CANVAS_W - marginX, barY + 52);
+            }
+
+            // --- Premium Media Playback Controls ---
+            if (state.showControls) {
+                const controlsY = 1360;
+                const centerY = controlsY + 45;
+
+                // 1. Shuffle Switch
+                const shufflePath = "M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5";
+                drawPath(ctx, shufflePath, marginX, centerY - 25, 2.3, "rgba(255,255,255,0.75)", null, 2.5);
+
+                // 2. Skip Backward
+                const prevPath = "M19 20L9 12l10-8v16zM5 19V5h2v14H5z";
+                drawPath(ctx, prevPath, 340, centerY - 28, 2.5, null, "#ffffff");
+
+                // 3. Iconic Center Play Button Ring
+                const playCircleX = CANVAS_W / 2;
+                
+                // Translucent glass base behind the play control
+                ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+                ctx.beginPath();
+                ctx.arc(playCircleX, centerY, 90, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Main White Circle Button
+                ctx.fillStyle = "#ffffff";
+                ctx.beginPath();
+                ctx.arc(playCircleX, centerY, 75, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Pause columns inside button
+                ctx.fillStyle = "#121216";
+                ctx.beginPath();
+                ctx.roundRect(playCircleX - 24, centerY - 25, 16, 50, 4);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.roundRect(playCircleX + 8, centerY - 25, 16, 50, 4);
+                ctx.fill();
+
+                // 4. Skip Forward
+                const nextPath = "M5 4l10 8-10 8V4zM19 5v14h-2V5h2z";
+                drawPath(ctx, nextPath, CANVAS_W - 340 - 60, centerY - 28, 2.5, null, "#ffffff");
+
+                // 5. Repeat Track Switch
+                const repeatPath = "M17 2l4 4-4 4M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 0 1-4 4H3";
+                drawPath(ctx, repeatPath, CANVAS_W - marginX - 55, centerY - 25, 2.3, "rgba(255,255,255,0.75)", null, 2.5);
+            }
+            
+            ctx.restore();
+        }
+
+        // --- Export Logic ---
+        function exportImage() {
+            render();
+
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+            const link = document.createElement('a');
+            const safeTitle = state.title.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'track';
+            
+            link.download = `${safeTitle}-aesthetic-wallpaper.jpg`;
+            link.href = dataUrl;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // Show Custom Micro Toast
+            const toast = document.getElementById('toast');
+            toast.classList.remove('opacity-0', 'translate-y-[-150%]');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-[-150%]');
+                toast.classList.remove('opacity-100', 'translate-y-0');
+            }, 3000);
+        }
+
+        // --- Interactive Gesture Controls on Canvas (Drag & Scroll) ---
+        let isDragging = false;
+        let startY = 0;
+        let initialOffsetY = 0;
+
+        canvas.style.cursor = 'grab';
+
+        function handleDragStart(clientY) {
+            isDragging = true;
+            startY = clientY;
+            initialOffsetY = state.uiOffsetY;
+            canvas.style.cursor = 'grabbing';
+        }
+
+        function handleDragMove(clientY) {
+            if (!isDragging) return;
+            const rect = canvas.getBoundingClientRect();
+            
+            // Adjust calculation based on standard scale of the canvas preview
+            const displayScale = CANVAS_H / rect.height;
+            const deltaY = (clientY - startY) * displayScale;
+            
+            // Boundaries check so player doesn't fly off screen completely
+            const newY = Math.max(-950, Math.min(950, initialOffsetY + deltaY));
+            updateState('uiOffsetY', newY);
+            
+            // Update input range slider inside control side-panel
+            const slider = document.getElementById('slUiY');
+            if (slider) {
+                slider.value = newY;
+                document.getElementById('valUiY').textContent = Math.round(newY);
+            }
+        }
+
+        function handleDragEnd() {
+            isDragging = false;
+            canvas.style.cursor = 'grab';
+        }
+
+        // Attach Mouse Drag Observers
+        canvas.addEventListener('mousedown', (e) => handleDragStart(e.clientY));
+        window.addEventListener('mousemove', (e) => handleDragMove(e.clientY));
+        window.addEventListener('mouseup', handleDragEnd);
+
+        // Attach Touch Screen Swipe Observers
+        canvas.addEventListener('touchstart', (e) => handleDragStart(e.touches[0].clientY), {passive: true});
+        window.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                if (e.cancelable) e.preventDefault(); 
+                handleDragMove(e.touches[0].clientY);
+            }
+        }, {passive: false});
+        window.addEventListener('touchend', handleDragEnd);
+
+        // Scroll Wheel Mouse Zoom/Scale Adjuster
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const scaleChange = e.deltaY > 0 ? -0.04 : 0.04;
+            let newScale = Math.max(0.4, Math.min(1.6, state.uiScale + scaleChange));
+            
+            newScale = Math.round(newScale * 100) / 100;
+            updateState('uiScale', newScale);
+            
+            const slider = document.getElementById('slUiScale');
+            if (slider) {
+                slider.value = newScale;
+                document.getElementById('valUiScale').textContent = newScale.toFixed(2) + 'x';
+            }
+        }, {passive: false});
+    </script>
+</body>
+</html>
