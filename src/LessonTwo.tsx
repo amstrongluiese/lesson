@@ -945,14 +945,15 @@ function StudentActivity() {
   const [isDragging, setIsDragging] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [rewardUnlocked, setRewardUnlocked] = useState(false);
-  const [isRewardRevealed, setIsRewardRevealed] = useState(false);
+  const [rewardClaimed, setRewardClaimed] = useState(false);
+  const [showRewardModal, setShowRewardModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const uploadCardRef = useRef<HTMLDivElement | null>(null);
   const sealRef = useRef<HTMLDivElement | null>(null);
   const flashRef = useRef<HTMLSpanElement | null>(null);
   const acceptedRef = useRef<HTMLDivElement | null>(null);
   const canSubmitActivity = Boolean(selectedFile && studentName.trim()) && uploadStatus !== "uploading";
-  const rewardImage = new URL("../images/reward1.png", import.meta.url).href;
+  const rewardImage = new URL("../images/reward2.png", import.meta.url).href;
   const starterCode = `<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -999,7 +1000,8 @@ function StudentActivity() {
     setUploadStatus("ready");
     setErrorMessage("");
     setRewardUnlocked(false);
-    setIsRewardRevealed(false);
+    setRewardClaimed(false);
+    setShowRewardModal(false);
     playTone(340, 0.04, 0.012);
     playTone(510, 0.05, 0.01);
   };
@@ -1015,7 +1017,8 @@ function StudentActivity() {
     setUploadStatus("idle");
     setErrorMessage("");
     setRewardUnlocked(false);
-    setIsRewardRevealed(false);
+    setRewardClaimed(false);
+    setShowRewardModal(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -1105,18 +1108,18 @@ function StudentActivity() {
   };
 
   useEffect(() => {
-    if (!isRewardRevealed) return;
+    if (!showRewardModal) return;
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = previousOverflow;
     };
-  }, [isRewardRevealed]);
+  }, [showRewardModal]);
 
   const rewardPopover = (
     <AnimatePresence>
-      {isRewardRevealed && (
+      {showRewardModal && (
         <motion.div
           className="lesson2-reward-popover"
           initial={{ opacity: 0 }}
@@ -1125,8 +1128,16 @@ function StudentActivity() {
           role="dialog"
           aria-modal="true"
           aria-label="Sea Salt Matcha Latte reward unlocked"
-          onClick={() => setIsRewardRevealed(false)}
+          onClick={() => setShowRewardModal(false)}
         >
+          <button
+            type="button"
+            className="lesson2-reward-popover-close"
+            onClick={() => setShowRewardModal(false)}
+            aria-label="Close reward"
+          >
+            Close
+          </button>
           <motion.div
             className="lesson2-reward-stage"
             initial={{ y: 38, scale: 0.82, rotateX: 10 }}
@@ -1135,14 +1146,6 @@ function StudentActivity() {
             transition={{ duration: 0.62, ease: [0.16, 1, 0.3, 1] }}
             onClick={(event) => event.stopPropagation()}
           >
-            <button
-              type="button"
-              className="lesson2-reward-popover-close"
-              onClick={() => setIsRewardRevealed(false)}
-              aria-label="Close reward"
-            >
-              Close
-            </button>
             <div className="lesson2-reward-spotlight" aria-hidden="true" />
             <div className="lesson2-ttpd-orbit" aria-hidden="true">
               <span>T</span>
@@ -1150,13 +1153,15 @@ function StudentActivity() {
               <span>P</span>
               <span>D</span>
             </div>
-            <figure>
-              <img src={rewardImage} alt="Sea Salt Matcha Latte reward" />
-              <figcaption>
-                <span>Reward Unlocked</span>
-                Sea Salt Matcha Latte
-              </figcaption>
-            </figure>
+            <div className="l1-envelope-wrapper">
+              <div className="l1-envelope-back" />
+              <div className="l1-envelope-inner-glow" />
+              <figure className="l1-reward-item">
+                <img src={rewardImage} alt="Sea Salt Matcha Latte reward" />
+              </figure>
+              <div className="l1-envelope-front" />
+              <div className="l1-envelope-flap" />
+            </div>
           </motion.div>
         </motion.div>
       )}
@@ -1319,13 +1324,18 @@ function StudentActivity() {
             </AnimatePresence>
           </motion.div>
 
-          <div className={`lesson2-reward-file ${rewardUnlocked ? "is-unlocked" : ""} ${isRewardRevealed ? "is-revealed" : ""}`}>
+          <div className={`lesson2-reward-file ${rewardUnlocked ? "is-unlocked" : ""} ${rewardClaimed ? "is-revealed" : ""}`}>
             <div className="lesson2-mystery-reward">
-              {isRewardRevealed ? (
-                <figure className="lesson2-reward-preview">
-                  <img src={rewardImage} alt="Sea Salt Matcha Latte reward" />
-                  <figcaption>Sea Salt Matcha Latte</figcaption>
-                </figure>
+              {rewardClaimed ? (
+                <div className="l1-envelope-wrapper inline-envelope">
+                  <div className="l1-envelope-back" />
+                  <div className="l1-envelope-inner-glow" />
+                  <figure className="l1-reward-item">
+                    <img src={rewardImage} alt="Sea Salt Matcha Latte reward" />
+                  </figure>
+                  <div className="l1-envelope-front" />
+                  <div className="l1-envelope-flap" />
+                </div>
               ) : (
                 <div className="lesson2-reward-seal">
                   <span>{rewardUnlocked ? "!" : "?"}</span>
@@ -1333,18 +1343,21 @@ function StudentActivity() {
                 </div>
               )}
             </div>
-            <button
-              type="button"
-              disabled={!rewardUnlocked}
-              onClick={() => {
-                if (!rewardUnlocked) return;
-                setIsRewardRevealed(true);
-                playTone(720, 0.08, 0.018);
-                playTone(960, 0.1, 0.012);
-              }}
-            >
-              Unlock Chapter Reward
-            </button>
+            {!rewardClaimed && (
+              <button
+                type="button"
+                disabled={!rewardUnlocked}
+                onClick={() => {
+                  if (!rewardUnlocked) return;
+                  setRewardClaimed(true);
+                  setShowRewardModal(true);
+                  playTone(720, 0.08, 0.018);
+                  playTone(960, 0.1, 0.012);
+                }}
+              >
+                Unlock Chapter Reward
+              </button>
+            )}
           </div>
         </div>
 
@@ -1444,6 +1457,8 @@ function FinaleDesk() {
     </section>
   );
 }
+
+
 
 function AudioPlayer({ shouldAutoPlay }: { shouldAutoPlay: boolean }) {
   const [isPlaying, setIsPlaying] = useState(false);

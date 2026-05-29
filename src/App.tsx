@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { FooterSection, HeroSection, IntroSection, MediaSection, MemoriesSection, Navigation, ParticleCanvas, SectionDivider, SemanticsSection, SkeletonSection, StepsSection } from "./components";
+import { FooterSection, HeroSection, MemoriesSection, Navigation, ParticleCanvas, LessonOneActivity } from "./components";
+import { Lesson1Content } from "./Lesson1Content";
 import LessonTwo from "./LessonTwo";
 import MusicPlayerGenerator from "./MusicPlayerGenerator";
 import "./styles.css";
@@ -242,6 +243,7 @@ function App() {
 
       <button
         className="lesson-switcher"
+        style={{ zIndex: 100 }}
         type="button"
         onClick={() => {
           window.location.hash = "lesson-2";
@@ -252,7 +254,7 @@ function App() {
 
       <button
         className="lesson-switcher"
-        style={{ top: "60px" }}
+        style={{ top: "60px", zIndex: 100 }}
         type="button"
         onClick={() => { window.location.hash = "music"; }}
       >
@@ -286,10 +288,10 @@ function App() {
 
       <Navigation />
 
-      <div className="music-toggle-wrap">
+      <div className="music-toggle-wrap" style={{ zIndex: 100 }}>
         <button
           id="music-toggle"
-          className="music-toggle glass-card"
+          className="music-toggle folklore-styled glass-card"
           type="button"
           aria-label={musicState === "playing" ? "Mute ambient music" : "Play ambient music"}
           onClick={(event) => {
@@ -297,18 +299,18 @@ function App() {
             setMusicState((current) => (current === "playing" ? "muted" : "playing"));
           }}
         >
-          <span className="music-toggle-label">{musicState === "playing" ? "On" : "Off"}</span>
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 18V5l12-2v13M9 9l12-2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+            <circle cx="6" cy="18" r="3" fill="currentColor"/>
+            <circle cx="18" cy="16" r="3" fill="currentColor"/>
+          </svg>
         </button>
       </div>
 
       <main className="page-main">
         <HeroSection />
-        <IntroSection />
-        <SkeletonSection />
-        <SectionDivider />
-        <MediaSection />
-        <SemanticsSection />
-        <StepsSection />
+        <Lesson1Content />
+        <LessonOneActivity />
         <MemoriesSection images={collageImages} />
         <FooterSection />
       </main>
