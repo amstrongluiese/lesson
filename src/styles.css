@@ -6163,3 +6163,117 @@ html::after {
   animation-delay: 3s;
   animation-duration: 14s;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN FOR MOBILE & TABLETS
+═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  .page-main {
+    padding: 5rem 2rem 8rem 2rem;
+  }
+  .semantic-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .page-main {
+    padding: 4rem 1rem 6rem 1rem;
+  }
+
+  .hero-title {
+    font-size: clamp(3rem, 15vw, 4.5rem);
+  }
+
+  .hero-copy {
+    font-size: clamp(1.1rem, 5vw, 1.3rem);
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 8vw, 2.5rem);
+  }
+
+  .section-card {
+    padding: 1.5rem;
+  }
+
+  .semantic-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-header-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .top-nav {
+    display: none;
+  }
+
+  .lesson-2-unlock-btn {
+    padding: 0.6rem;
+    font-size: 0.75rem;
+    max-width: 150px;
+  }
+
+  .lesson-2-unlock-btn span {
+    display: none; /* Hide the text "Unlock Lesson 2", keep the icon if possible */
+  }
+
+  body::before,
+  body::after {
+    font-size: 2rem;
+    opacity: 0.02;
+  }
+
+  /* Make collage images flow vertically rather than overflowing */
+  .collage-container {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    height: auto !important;
+    min-height: auto !important;
+  }
+  
+  .polaroid {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin: 0.5rem;
+    width: calc(50% - 1rem) !important;
+  }
+
+  .music-toggle-wrap {
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  .gramophone-btn {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .manuscript-section {
+    padding: 2rem 1.5rem;
+  }
+  
+  .code-block pre {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .polaroid {
+    width: 100% !important;
+    margin: 0.5rem 0;
+  }
+
+  .lesson-2-unlock-btn {
+    top: 5px;
+    right: 5px;
+  }
+}

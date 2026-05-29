@@ -31,6 +31,43 @@ type ManuscriptSectionProps = {
   isRightNumber?: boolean;
 };
 
+export function DriedFlower({ type = 1, style, className = "" }: { type?: number; style?: CSSProperties; className?: string }) {
+  const flowers = {
+    1: (
+      <svg viewBox="0 0 100 200" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
+        {/* Fern / Stem */}
+        <path d="M50 190 Q45 100 50 10" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
+        <path d="M50 150 Q20 140 30 110 Q45 120 50 150" fill="currentColor" opacity="0.6" />
+        <path d="M50 140 Q80 130 70 100 Q55 110 50 140" fill="currentColor" opacity="0.6" />
+        <path d="M50 110 Q10 100 20 60 Q45 80 50 110" fill="currentColor" opacity="0.5" />
+        <path d="M50 100 Q90 90 80 50 Q55 70 50 100" fill="currentColor" opacity="0.5" />
+        <path d="M50 70 Q20 50 30 20 Q45 40 50 70" fill="currentColor" opacity="0.4" />
+        <path d="M50 60 Q80 40 70 10 Q55 30 50 60" fill="currentColor" opacity="0.4" />
+      </svg>
+    ),
+    2: (
+      <svg viewBox="0 0 100 150" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
+        {/* Stem */}
+        <path d="M50 140 Q55 90 50 40" stroke="currentColor" strokeWidth="1.5" fill="none" />
+        <circle cx="50" cy="40" r="4" fill="currentColor" opacity="0.8" />
+        <path d="M50 40 Q20 50 35 25 Q45 35 50 40" fill="currentColor" opacity="0.5" />
+        <path d="M50 40 Q80 50 65 25 Q55 35 50 40" fill="currentColor" opacity="0.5" />
+        <path d="M50 40 Q30 20 45 10 Q48 25 50 40" fill="currentColor" opacity="0.4" />
+        <path d="M50 40 Q70 20 55 10 Q52 25 50 40" fill="currentColor" opacity="0.4" />
+        <path d="M50 90 Q30 85 45 70 Q48 80 50 90" fill="currentColor" opacity="0.5" />
+        <path d="M50 70 Q70 65 55 50 Q52 60 50 70" fill="currentColor" opacity="0.5" />
+      </svg>
+    )
+  };
+
+  return (
+    <div className={`dried-flower ${className}`} style={{ ...style, pointerEvents: 'none', mixBlendMode: 'multiply' }}>
+      {flowers[type as keyof typeof flowers] || flowers[1]}
+      <div className="flower-tape" />
+    </div>
+  );
+}
+
 export function ManuscriptSection({
   id,
   chapterNumber,
@@ -42,10 +79,28 @@ export function ManuscriptSection({
   beginnerTip,
   isRightNumber,
 }: ManuscriptSectionProps) {
+  // Generate some deterministic variation based on title
+  const hasFlower = (title.length + id.length) % 3 !== 0; // Show on most sections
+  const flowerType = (title.length % 2) + 1;
+  const flowerRot = -30 + ((title.length * 15) % 60);
+  const flowerScale = 0.85 + ((title.length % 3) * 0.1);
+
   return (
     <section id={id} className="section reveal relative">
       <div className={`section-number ${isRightNumber ? 'right' : ''}`}>{chapterNumber}</div>
       <div className="manuscript-section">
+        {hasFlower && (
+          <DriedFlower 
+            type={flowerType} 
+            style={{ 
+              position: 'absolute', 
+              top: '-20px', 
+              [isRightNumber ? 'left' : 'right']: '15%', 
+              transform: `rotate(${flowerRot}deg) scale(${flowerScale})`,
+              zIndex: 15
+            }} 
+          />
+        )}
         <div className="paper-clip" />
         <div className="masking-tape" />
         <h2 className="section-title">{title}</h2>
@@ -67,7 +122,7 @@ export function ManuscriptSection({
         <div className="beginner-tip-note">
           {beginnerTip}
         </div>
-        <div className="archive-stamp">HTML ARCHIVE</div>
+        <div className="wax-seal" aria-hidden="true" />
       </div>
     </section>
   );
