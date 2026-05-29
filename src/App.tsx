@@ -241,26 +241,6 @@ function App() {
     <div className="app-shell">
       <div id="scroll-progress" />
 
-      <button
-        className="lesson-switcher"
-        style={{ zIndex: 100 }}
-        type="button"
-        onClick={() => {
-          window.location.hash = "lesson-2";
-        }}
-      >
-        Lesson 2
-      </button>
-
-      <button
-        className="lesson-switcher"
-        style={{ top: "60px", zIndex: 100 }}
-        type="button"
-        onClick={() => { window.location.hash = "music"; }}
-      >
-        Music Gen
-      </button>
-
       <div className="film-grain" />
       <div className="fog-bg" />
       <ParticleCanvas />

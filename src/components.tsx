@@ -621,6 +621,18 @@ export function LessonOneActivity({ onUnlock }: { onUnlock?: () => void }) {
                   Claim Your Reward
                 </button>
               )}
+              {rewardClaimed && (
+                <button
+                  type="button"
+                  className="l1-claim-btn"
+                  onClick={() => {
+                    window.location.hash = "lesson-2";
+                  }}
+                  style={{ marginTop: '0.5rem', background: 'rgba(90, 122, 82, 0.85)', color: '#fff', border: 'none' }}
+                >
+                  Proceed to Lesson 2
+                </button>
+              )}
             </div>
 
           </div>

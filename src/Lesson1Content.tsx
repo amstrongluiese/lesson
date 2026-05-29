@@ -201,8 +201,9 @@ export function Lesson1Content() {
           </code></pre>
         }
         visualExample={
-          <div style={{ width: '200px', height: '120px', background: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            [Image: A dark, misty forest]
+          <div className="polaroid" style={{ transform: 'rotate(-2deg)', display: 'inline-block', padding: '10px 10px 30px 10px', background: '#fff', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}>
+            <img src={new URL("../images/folklore-woods.jpg", import.meta.url).href} alt="A dark, misty forest" style={{ width: '220px', height: 'auto', display: 'block' }} />
+            <div style={{ fontFamily: '"Caveat", cursive', fontSize: '1.2rem', color: '#333', textAlign: 'center', marginTop: '10px' }}>the misty woods</div>
           </div>
         }
         beginnerTip="Always include the 'alt' attribute! It's crucial for users who rely on screen readers."
