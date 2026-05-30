@@ -90,35 +90,35 @@ export function ManuscriptSection({
       <div className={`section-number ${isRightNumber ? 'right' : ''}`}>{chapterNumber}</div>
       <div className="manuscript-section">
         {hasFlower && (
-          <DriedFlower 
-            type={flowerType} 
-            style={{ 
-              position: 'absolute', 
-              top: '-20px', 
-              [isRightNumber ? 'left' : 'right']: '15%', 
+          <DriedFlower
+            type={flowerType}
+            style={{
+              position: 'absolute',
+              top: '-20px',
+              [isRightNumber ? 'left' : 'right']: '15%',
               transform: `rotate(${flowerRot}deg) scale(${flowerScale})`,
               zIndex: 15
-            }} 
+            }}
           />
         )}
         <div className="paper-clip" />
         <div className="masking-tape" />
         <h2 className="section-title">{title}</h2>
         <div className="section-copy">{explanation}</div>
-        
+
         <h3 className="subsection-title" style={{ marginTop: '2rem' }}>Real-Life Analogy</h3>
         <div className="section-copy" style={{ fontStyle: 'italic', color: 'var(--moss)' }}>
           {realLifeExample}
         </div>
-        
+
         <div className="manuscript-code">
           {codeSample}
         </div>
-        
+
         <div className="visual-example">
           {visualExample}
         </div>
-        
+
         <div className="beginner-tip-note">
           {beginnerTip}
         </div>
@@ -631,7 +631,7 @@ export function LessonOneActivity({ onUnlock }: { onUnlock?: () => void }) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
                   >
-                    <p className="typewriter-text">Your manuscript has been accepted into the archive.</p>
+                    <p className="typewriter-text">Your manuscript has been accepted.</p>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -652,7 +652,7 @@ export function LessonOneActivity({ onUnlock }: { onUnlock?: () => void }) {
                       <div className="l1-envelope-flap" />
                     </div>
                     <p style={{ fontFamily: '"Courier Prime", monospace', fontSize: '0.85rem', letterSpacing: '0.05em', color: 'rgba(90, 122, 82, 0.9)', margin: 0, fontWeight: 'bold' }}>
-                      Bikini Bottom Buddies
+                      Twister Fries
                     </p>
                   </>
                 ) : (
